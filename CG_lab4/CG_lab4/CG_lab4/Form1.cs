@@ -453,7 +453,13 @@ namespace CG_lab4
 
         private void in_polygon() // Проверка на вхождение точки в полигон - метод лучей(точка = random_button)
         {
-            //Задача Ани
+            int count = 0;
+            for (int i = random_point.X; i < canvas.Width; ++i)
+                if (((Bitmap)canvas.Image).GetPixel(i, random_point.Y) == Color.FromArgb(255, 0, 0, 0) && ((Bitmap)canvas.Image).GetPixel(i-1, random_point.Y) != Color.FromArgb(255, 0, 0, 0))
+                    ++count;
+            if (count % 2 == 0)
+                label_help.Text = "Не в полигоне";
+            else label_help.Text = "В полигоне";
         }
 
         private void turn_line() //Поворачивание ребра на 90 градусов
@@ -467,7 +473,28 @@ namespace CG_lab4
         }
         private void point_location() // Определяет положение точки относительно ребра
         {
-            //Задача Ани
+            /* double length_point = Math.Sqrt((from.X - random_point.X) * (from.X - random_point.X) + (from.Y - random_point.Y) * (from.Y - random_point.Y));
+             double length_line = Math.Sqrt((from.X - to.X) * (from.X - to.X) + (from.Y - to.Y) * (from.Y - to.Y));
+             double sin_line = to.Y / length_line;
+             double cos_line = to.X / length_line;
+             double sin_point = random_point.Y / length_point;
+             double cos_point = random_point.X / length_point;*/
+
+            /*double [,] old_matr_line = { { 0, 0, 0 }, { to.X, to.Y, 1 }, { 0, 0, 0 } };
+            double [,] new_matr_line = { { 1, 0, 0 }, { 0, 1, 0 }, { -(to.X - from.X), -(to.Y - from.Y), 1 } };
+            old_matr_line = matrix_multiplication(old_matr_line, new_matr_line);*/
+            Point new_line = new Point(to.X - from.X, to.Y - from.Y);
+
+            /*double[,] old_matr_point = { { 0, 0, 0 }, { random_point.X, random_point.Y, 1 }, { 0, 0, 0 } };
+            double[,] new_matr_point = { { 1, 0, 0 }, { 0, 1, 0 }, { -(random_point.X - from.X), -(random_point.Y - from.Y), 1 } };
+            old_matr_point = matrix_multiplication(old_matr_point, new_matr_point);*/
+            Point new_point = new Point(random_point.X - from.X, random_point.Y - from.Y);
+
+
+            if ((new_point.Y * new_line.X - new_point.X * new_line.Y) < 0)
+                label_help.Text = "Точка находится СЛЕВА";
+            else
+                label_help.Text = "Точка находится СПРАВА";
         }
 
 
