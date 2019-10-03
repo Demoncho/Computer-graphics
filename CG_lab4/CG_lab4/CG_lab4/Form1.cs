@@ -464,12 +464,81 @@ namespace CG_lab4
 
         private void turn_line() //Поворачивание ребра на 90 градусов
         {
-            //Задача Серого
+            double cos = Math.Cos(Math.PI / 180 * 90);
+            double sin = Math.Sin(Math.PI / 180 * 90);
+
+            double[,] old_matr_from = { { 0, 0, 0 }, { from.X, from.Y, 1 }, { 0, 0, 0 } };
+            double[,] matr_dot_from = { { 1, 0, 0 }, { 0, 1, 0 }, { -random_point.X, -random_point.Y, 1 } };
+            double[,] matr_angle_from = { { cos, sin, 0 }, { -sin, cos, 0 }, { 0, 0, 1 } };
+            double[,] new_matr_from = { { 1, 0, 0 }, { 0, 1, 0 }, { random_point.X, random_point.Y, 1 } };
+
+            double[,] old_matr_to = { { 0, 0, 0 }, { to.X, to.Y, 1 }, { 0, 0, 0 } };
+            double[,] matr_dot_to = { { 1, 0, 0 }, { 0, 1, 0 }, { -random_point.X, -random_point.Y, 1 } };
+            double[,] matr_angle_to = { { cos, sin, 0 }, { -sin, cos, 0 }, { 0, 0, 1 } };
+            double[,] new_matr_to = { { 1, 0, 0 }, { 0, 1, 0 }, { random_point.X, random_point.Y, 1 } };
+
+            old_matr_from = matrix_multiplication(old_matr_from, matr_dot_from);
+            old_matr_from = matrix_multiplication(old_matr_from, matr_angle_from);
+            old_matr_from = matrix_multiplication(old_matr_from, new_matr_from);
+
+            old_matr_to = matrix_multiplication(old_matr_to, matr_dot_to);
+            old_matr_to = matrix_multiplication(old_matr_to, matr_angle_to);
+            old_matr_to = matrix_multiplication(old_matr_to, new_matr_to);
+
+            from = get_point_from_matrix(old_matr_from);
+            to = get_point_from_matrix(old_matr_to);
+
+            canvas.Image = new Bitmap(canvas.Width, canvas.Height);
+            g = Graphics.FromImage(canvas.Image);
+            g.Clear(Color.White);
+            canvas.Refresh();
+            g.DrawLine(pen, from, to);
+            canvas.Refresh();
         }
 
         private void point_cross() //Точка пересечения 2х прямых
         {
-            //Задача Серого
+             if (from.X > to.X) //упорядочиваем по возрастанию X
+            {
+                Point temp = from;
+                from = to;
+                to = temp;
+            }
+
+
+            if (from_second.X > to_second.X) 
+            {
+                Point temp = from_second;
+                from_second = to_second;
+                to_second = temp;
+            }
+
+
+            Point res;
+            if (to_second.X - from_second.X - to.X + from.X == 0 || to_second.Y - from_second.Y - to.Y + from.Y == 0)
+                label_help.Text = "Линии параллельны";
+            else
+            {
+                int k = (to.Y - from.Y) * (to_second.Y - from_second.Y) * (from.X - from_second.X);
+                int l = (to.X - from.X) * (to_second.Y - from_second.Y);
+                int m = (to_second.X - from_second.X) * (to.Y - from.Y);
+                int y, x;
+                if (l == m)
+                    y = 0;
+                else
+                    y = (l * from.Y - m * from_second.Y - k) / (l - m);
+                if (to.Y == from.Y)
+                    x = from.X;
+                else
+                    x = ((to.X - from.X) * (y - from.Y) / (to.Y - from.Y)) + from.X;
+                if (x < Math.Min(from.X,from_second.X)|| x > Math.Max(to.X, to_second.X) || y < Math.Min(from.Y, Math.Min(to.Y, Math.Min(from_second.Y, to_second.Y))) || y > Math.Max(from.Y, Math.Max(to.Y, Math.Max(from_second.Y, to_second.Y)))) 
+                    label_help.Text = "Не пересекаются";
+                else
+                {
+                    res = new Point(x, y);
+                    label_help.Text = res.ToString();
+                }
+            }
         }
         private void point_location() // Определяет положение точки относительно ребра
         {
