@@ -63,19 +63,9 @@
             0,
             0,
             0});
-            this.numericUpDown_generation.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.numericUpDown_generation.Name = "numericUpDown_generation";
             this.numericUpDown_generation.Size = new System.Drawing.Size(58, 20);
             this.numericUpDown_generation.TabIndex = 2;
-            this.numericUpDown_generation.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.numericUpDown_generation.ValueChanged += new System.EventHandler(this.numericUpDown_generation_ValueChanged);
             // 
             // label1
