@@ -26,5 +26,10 @@ namespace CG_lab5
         {
             new L_systems().Show();
         }
+
+        private void button_Diamond_square_Click(object sender, EventArgs e)
+        {
+            new Diamond_square().Show();
+        }
     }
 }

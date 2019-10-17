@@ -51,6 +51,7 @@
             this.button_Diamond_square.TabIndex = 1;
             this.button_Diamond_square.Text = " Diamond-square";
             this.button_Diamond_square.UseVisualStyleBackColor = true;
+            this.button_Diamond_square.Click += new System.EventHandler(this.button_Diamond_square_Click);
             // 
             // button_Bisea
             // 
