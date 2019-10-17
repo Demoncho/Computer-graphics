@@ -45,6 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bezie.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bezie.Designer.cs">
+      <DependentUpon>Bezie.cs</DependentUpon>
+    </Compile>
     <Compile Include="Diamond_square.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,6 +71,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Bezie.resx">
+      <DependentUpon>Bezie.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Diamond_square.resx">
       <DependentUpon>Diamond_square.cs</DependentUpon>
     </EmbeddedResource>

@@ -61,6 +61,7 @@
             this.button_Bisea.TabIndex = 2;
             this.button_Bisea.Text = "Кубические сплайны Безье";
             this.button_Bisea.UseVisualStyleBackColor = true;
+            this.button_Bisea.Click += new System.EventHandler(this.button_Bisea_Click);
             // 
             // Form1
             // 

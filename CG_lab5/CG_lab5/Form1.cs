@@ -31,5 +31,10 @@ namespace CG_lab5
         {
             new Diamond_square().Show();
         }
+
+        private void button_Bisea_Click(object sender, EventArgs e)
+        {
+            new Bezie().Show();
+        }
     }
 }
