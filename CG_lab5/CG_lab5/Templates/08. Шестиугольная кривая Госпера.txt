@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 FX 60
 X => X+YF++YF-FX--FXFX-YF+
+=======
+XF 60
+X => X+YF++YF-FX--FXFX-YF+
+>>>>>>> dfaf681397a6a94e444c38b24ad3f744b3aefc32
 Y => -FX+YFYF++YF+FX--FX-Y

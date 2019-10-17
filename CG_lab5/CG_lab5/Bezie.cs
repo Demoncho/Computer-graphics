@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -115,14 +116,140 @@ namespace CG_lab5
             for (int i = 0; i<points.Count;++i)
                 g.FillEllipse(new SolidBrush(Color.Black), new Rectangle(points[i].X, points[i].Y, 3, 3));
 
+=======
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace CG_lab5
+{
+    public partial class Bezie : Form
+    {
+        Bitmap bmp;
+        Graphics g;
+        Pen pen = new Pen(Color.Black);
+        Point to, from;
+        List<Point> points = new List<Point>();
+        public Bezie()
+        {
+            InitializeComponent();
+            pictureBox_bezie.Image = new Bitmap(pictureBox_bezie.Width, pictureBox_bezie.Height);
+            bmp = (Bitmap)pictureBox_bezie.Image;
+            //Clear();
+            pictureBox_bezie.Image = bmp;
+            g = Graphics.FromImage(pictureBox_bezie.Image);
+            g.Clear(Color.White);
+        }
+
+        private void Bezie_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox_bezie_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button_clear_bezie_Click(object sender, EventArgs e)
+        {
+            points.Clear();
+            pictureBox_bezie.Image = new Bitmap(pictureBox_bezie.Width, pictureBox_bezie.Height);
+            g = Graphics.FromImage(pictureBox_bezie.Image);
+            g.Clear(Color.White);
+            pictureBox_bezie.Refresh();
+        }
+
+        private void pictureBox_bezie_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (radioButton_add.Checked)
+            {
+                to = e.Location;               
+            }
+            else if (radioButton_delete.Checked)
+            {
+                to = e.Location;
+            }
+            else
+            {
+                from = e.Location;
+            }
+        }
+
+        private void pictureBox_bezie_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void pictureBox_bezie_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (radioButton_add.Checked)
+            {
+                to = e.Location;
+                points.Add(new Point(to.X, to.Y));
+                g.FillEllipse(new SolidBrush(Color.Black), new Rectangle(to.X, to.Y, 3, 3));
+                pictureBox_bezie.Refresh();
+                if (points.Count > 3)
+                    bezie_alg();
+            }
+            else if (radioButton_delete.Checked)
+            {
+                if (points.Count > 0)
+                {
+                    to = e.Location;
+                    List<double> dist = points.Select(x => distance_between(to, x)).ToList();
+                    int min_id = dist.FindIndex(x => x == dist.Min());
+                    g.FillEllipse(new SolidBrush(Color.White), new Rectangle(points[min_id].X, points[min_id].Y, 3, 3));
+                    points.RemoveAt(min_id);
+                    pictureBox_bezie.Refresh();
+                    if (points.Count > 3)
+                        bezie_alg();
+                }
+            }
+            else
+            {
+                to = e.Location;
+                List<double> dist = points.Select(x => distance_between(from, x)).ToList();
+                int min_id = dist.FindIndex(x => x == dist.Min());
+                g.FillEllipse(new SolidBrush(Color.White), new Rectangle(points[min_id].X, points[min_id].Y, 3, 3));
+                points[min_id] = to;
+                g.FillEllipse(new SolidBrush(Color.Black), new Rectangle(to.X, to.Y, 3, 3));
+                pictureBox_bezie.Refresh();
+                if (points.Count > 3)
+                    bezie_alg();
+            }
+        }
+
+        private void bezie_alg()
+        {
+            pictureBox_bezie.Image = new Bitmap(pictureBox_bezie.Width, pictureBox_bezie.Height);
+            g = Graphics.FromImage(pictureBox_bezie.Image);
+            g.Clear(Color.White);
+            pictureBox_bezie.Refresh();
+            for (int i = 0; i<points.Count;++i)
+                g.FillEllipse(new SolidBrush(Color.Black), new Rectangle(points[i].X, points[i].Y, 3, 3));
+
+>>>>>>> dfaf681397a6a94e444c38b24ad3f744b3aefc32
             for (int i = 1; i < points.Count - 1; i += 2)
             {
                 PointF p0, p1, p2, p3;
 
                 int prev = i - 1; 
+<<<<<<< HEAD
                 int last = i + 2;
 
                 if (prev == 0)
+=======
+                int next2 = i + 2;
+
+                if (prev == 0)
+>>>>>>> dfaf681397a6a94e444c38b24ad3f744b3aefc32
                     p0 = points[prev];
                 else
                     p0 = new PointF((points[i].X + points[prev].X) / 2, (points[i].Y + points[prev].Y) / 2);
@@ -131,12 +258,17 @@ namespace CG_lab5
                 {
                     p1 = points[i];
                     p3 = points[i + 1];
+<<<<<<< HEAD
                     p2 = new PointF((p3.X + p1.X) / 2, (p3.Y + p1.Y) / 2);                                     
+=======
+                    p2 = new PointF((p3.X + p1.X) / 2, (p3.Y + p1.Y) / 2);
+>>>>>>> dfaf681397a6a94e444c38b24ad3f744b3aefc32
                 }
                 else
                 {
                     p1 = points[i];
                     p2 = points[i + 1];
+<<<<<<< HEAD
                     if (last == points.Count - 1)
                         p3 = points[last];
                     else
@@ -155,6 +287,24 @@ namespace CG_lab5
             float step = 0.01f;
             int step_draw = 101;
             List<PointF> result = new List<PointF>();
+=======
+                    if (next2 == points.Count - 1)
+                        p3 = points[next2];
+                    else
+                        p3 = new PointF((points[next2].X + p2.X) / 2, (points[next2].Y + p2.Y) / 2);
+                }
+
+                g.DrawLines(pen, calcaluteCubeСurve(p0, p1, p2, p3));
+                pictureBox_bezie.Refresh();
+            }
+        }
+
+        private PointF[] calcaluteCubeСurve(PointF p0, PointF p1, PointF p2, PointF p3)
+        {
+            float step = 0.01f;
+            int step_draw = 101;
+            PointF[] result = new PointF[step_draw];
+>>>>>>> dfaf681397a6a94e444c38b24ad3f744b3aefc32
             PointF q0 = new PointF();
             PointF q1 = new PointF();
             PointF q2 = new PointF();
@@ -172,6 +322,7 @@ namespace CG_lab5
                 x = r0.X * (1 - t) + r1.X * t;
                 y = r0.Y * (1 - t) + r1.Y * t;
                 t += step;
+<<<<<<< HEAD
                 result.Add(new PointF(x, y));
             }
             return result;
@@ -184,3 +335,17 @@ namespace CG_lab5
 
     }
 }
+=======
+                result[i] = new PointF(x, y);
+            }
+            return result;
+        }
+
+        private double distance_between(Point a, Point b)
+        {
+            return Math.Sqrt((a.X - b.X)*(a.X - b.X) + (a.Y - b.Y)*(a.Y - b.Y));
+        }
+
+    }
+}
+>>>>>>> dfaf681397a6a94e444c38b24ad3f744b3aefc32
