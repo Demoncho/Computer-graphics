@@ -1,0 +1,10 @@
+D:\Homework\CG\Computer-graphics\CG_lab6\CG_lab6\bin\Debug\CG_lab6.exe.config
+D:\Homework\CG\Computer-graphics\CG_lab6\CG_lab6\bin\Debug\CG_lab6.exe
+D:\Homework\CG\Computer-graphics\CG_lab6\CG_lab6\bin\Debug\CG_lab6.pdb
+D:\Homework\CG\Computer-graphics\CG_lab6\CG_lab6\obj\Debug\CG_lab6.csprojAssemblyReference.cache
+D:\Homework\CG\Computer-graphics\CG_lab6\CG_lab6\obj\Debug\CG_lab6.Form1.resources
+D:\Homework\CG\Computer-graphics\CG_lab6\CG_lab6\obj\Debug\CG_lab6.Properties.Resources.resources
+D:\Homework\CG\Computer-graphics\CG_lab6\CG_lab6\obj\Debug\CG_lab6.csproj.GenerateResource.cache
+D:\Homework\CG\Computer-graphics\CG_lab6\CG_lab6\obj\Debug\CG_lab6.csproj.CoreCompileInputs.cache
+D:\Homework\CG\Computer-graphics\CG_lab6\CG_lab6\obj\Debug\CG_lab6.exe
+D:\Homework\CG\Computer-graphics\CG_lab6\CG_lab6\obj\Debug\CG_lab6.pdb
