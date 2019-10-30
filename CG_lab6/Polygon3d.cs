@@ -8,11 +8,15 @@ namespace CG_lab6
 {
     class Polygon3d
     {
-        public List<Line3d> lines { get; set; } = new List<Line3d>();
+        public List<Point3d> points { get; set; }
 
-        public Polygon3d(ref List<Line3d> lines)
+        public Polygon3d()
         {
-            this.lines = lines;
+            this.points = new List<Point3d>();
+        }
+        public Polygon3d( List<Point3d> points)
+        {
+            this.points = points;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -20,6 +21,7 @@ namespace CG_lab6
         Pen red_pen = new Pen(Color.Red);
         List<Point3d> polyhedron_points = new List<Point3d>();
         List<Point3d> projection_points = new List<Point3d>();
+        Polyhedron main_polyhedron = new Polyhedron();
         Line3d line = new Line3d(new Point3d(), new Point3d());
         public Form1()
         {
@@ -43,6 +45,7 @@ namespace CG_lab6
             make_all_invisible();
             polyhedron_points.Clear();
             projection_points.Clear();
+            main_polyhedron = new Polyhedron();
             pictureBox_3d_picture.Image = new Bitmap(pictureBox_3d_picture.Width, pictureBox_3d_picture.Height);
             g = Graphics.FromImage(pictureBox_3d_picture.Image);
             g.Clear(Color.White);
@@ -51,31 +54,46 @@ namespace CG_lab6
 
         private void button_add_tetrahedron_Click(object sender, EventArgs e)
         {
-            is_drawn = true;
-            float x = float.Parse(textBox_coordinate_X.Text);
-            float y = float.Parse(textBox_coordinate_Y.Text);
-            float z = float.Parse(textBox_coordinate_Z.Text);
-            length = float.Parse(textBox_coordinate_length.Text);
-            float length_2 = (float)(length / Math.Sqrt(2));
-            Point3d start = new Point3d(x, y, z);
-            Point3d p2 = new Point3d(x + length_2, y + length_2, z);
-            Point3d p3 = new Point3d(x + length_2, y, z + length_2);
-            Point3d p4 = new Point3d(x, y + length_2, z + length_2);
-            polyhedron_points.Add(start);
-            polyhedron_points.Add(p2);
-            polyhedron_points.Add(p3);
-            polyhedron_points.Add(p4);
-            projection_points.Add(start);
-            projection_points.Add(p2);
-            projection_points.Add(p3);
-            projection_points.Add(p4);
-            g.DrawLine(pen, start.To2D(), p2.To2D());
-            g.DrawLine(pen, start.To2D(), p3.To2D());
-            g.DrawLine(pen, start.To2D(), p4.To2D());
-            g.DrawLine(pen, p2.To2D(), p3.To2D());
-            g.DrawLine(pen, p2.To2D(), p4.To2D());
-            g.DrawLine(pen, p3.To2D(), p4.To2D());
-            pictureBox_3d_picture.Refresh();
+            if (is_drawn == false)
+            {
+                is_drawn = true;
+                float x = float.Parse(textBox_coordinate_X.Text);
+                float y = float.Parse(textBox_coordinate_Y.Text);
+                float z = float.Parse(textBox_coordinate_Z.Text);
+                length = float.Parse(textBox_coordinate_length.Text);
+                float length_2 = (float)(length / Math.Sqrt(2));
+                Point3d start = new Point3d(x, y, z);
+                Point3d p2 = new Point3d(x + length_2, y + length_2, z);
+                Point3d p3 = new Point3d(x + length_2, y, z + length_2);
+                Point3d p4 = new Point3d(x, y + length_2, z + length_2);
+                polyhedron_points.Add(start);
+                polyhedron_points.Add(p2);
+                polyhedron_points.Add(p3);
+                polyhedron_points.Add(p4);
+                projection_points.Add(start);
+                projection_points.Add(p2);
+                projection_points.Add(p3);
+                projection_points.Add(p4);
+                g.DrawLine(pen, start.To2D(), p2.To2D());
+                g.DrawLine(pen, start.To2D(), p3.To2D());
+                g.DrawLine(pen, start.To2D(), p4.To2D());
+                g.DrawLine(pen, p2.To2D(), p3.To2D());
+                g.DrawLine(pen, p2.To2D(), p4.To2D());
+                g.DrawLine(pen, p3.To2D(), p4.To2D());
+                Polygon3d polygon_1st = new Polygon3d();
+                Polygon3d polygon_2nd = new Polygon3d();
+                Polygon3d polygon_3rd = new Polygon3d();
+                Polygon3d polygon_4th = new Polygon3d();
+                polygon_1st.points.Add(start); polygon_1st.points.Add(p2); polygon_1st.points.Add(p3);
+                polygon_2nd.points.Add(start); polygon_2nd.points.Add(p2); polygon_2nd.points.Add(p4);
+                polygon_3rd.points.Add(start); polygon_3rd.points.Add(p3); polygon_3rd.points.Add(p4);
+                polygon_4th.points.Add(p2); polygon_4th.points.Add(p3); polygon_4th.points.Add(p4);
+                main_polyhedron.polygons.Add(polygon_1st);
+                main_polyhedron.polygons.Add(polygon_2nd);
+                main_polyhedron.polygons.Add(polygon_3rd);
+                main_polyhedron.polygons.Add(polygon_4th);
+                pictureBox_3d_picture.Refresh();
+            }
         }
 
         private void comboBox_action_SelectedIndexChanged(object sender, EventArgs e)
@@ -682,6 +700,63 @@ namespace CG_lab6
         {
             button_action_Click(sender, e);
             button_project_Click(sender, e);
+        }
+
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Лабораторная работа №7. Построение трёхмерных моделей !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        private void button_load_Click(object sender, EventArgs e)
+        {
+            var dialog = new OpenFileDialog();
+            dialog.InitialDirectory = Environment.CurrentDirectory.Replace("bin\\Debug", "");
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                string selectedFile = dialog.FileName;
+                parse(selectedFile);
+            }
+        }
+
+        private void parse(string file_name)
+        {
+            string[] lines = File.ReadAllLines(file_name);
+            foreach (string line in lines)
+            {
+                List<Point3d> points_polygon = new List<Point3d>();
+                string[] coordinates = line.Split(' ')[1].Split(';');
+                foreach (string coordinate in coordinates)
+                {
+                    string coordinate_without_brackets = coordinate.Trim(new char[] { '(', ')' });
+                    string[] numbers = coordinate_without_brackets.Split(',');
+                    Point3d temp_point = new Point3d(float.Parse(numbers[0]), float.Parse(numbers[1]), float.Parse(numbers[2]));
+                    points_polygon.Add(temp_point);
+                }
+                Polygon3d temp_polygon = new Polygon3d(points_polygon);
+                main_polyhedron.polygons.Add(temp_polygon);              
+            }
+            draw_main_polyhedron();
+        }
+
+        private void draw_main_polyhedron()
+        {
+            is_drawn = true;
+            foreach (Polygon3d polygon in main_polyhedron.polygons)
+            {
+                for (int i = 0; i < polygon.points.Count - 1; ++i)
+                {
+                    if (!polyhedron_points.Contains(polygon.points[i]))
+                    {
+                        polyhedron_points.Add(polygon.points[i]);
+                    }
+                    g.DrawLine(pen, polygon.points[i].To2D(), polygon.points[i + 1].To2D());
+                }
+                if (!polyhedron_points.Contains(polygon.points[polygon.points.Count - 1]))
+                {
+                    polyhedron_points.Add(polygon.points[polygon.points.Count - 1]);
+                }
+                g.DrawLine(pen, polygon.points[polygon.points.Count - 1].To2D(), polygon.points[0].To2D());
+                
+            }
+            pictureBox_3d_picture.Refresh();
         }
     }
 }

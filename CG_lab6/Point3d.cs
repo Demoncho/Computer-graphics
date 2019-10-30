@@ -30,6 +30,16 @@ namespace CG_lab6
             this.Z = z;
         }
 
+        static public bool operator ==(Point3d p1, Point3d p2)
+        {
+            return p1.X == p2.X && p1.Y == p2.Y && p1.Z == p2.Z;
+        }
+
+        static public bool operator !=(Point3d p1, Point3d p2)
+        {
+            return p1.X != p2.X || p1.Y != p2.Y || p1.Z != p2.Z;
+        }
+
         public PointF To2D()
         {
             return new PointF((float)(275 + X + Y/Math.Sqrt(2)), (float)(275 + Z + Y/Math.Sqrt(2)));
