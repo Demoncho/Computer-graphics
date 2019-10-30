@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace CG_lab6
 {
-    class Point3d
+    public class Point3d
     {
         public float X { get; set; }
         public float Y { get; set; }
@@ -44,6 +44,16 @@ namespace CG_lab6
         {
             return new PointF((float)(275 + X + Y/Math.Sqrt(2)), (float)(275 + Z + Y/Math.Sqrt(2)));
             //return new PointF((float)(X + 275 - 50), (float)((550 - Y) - 275 + 50));
+        }
+
+        public float X2D()
+        {
+            return (float)(275 + X + Y / Math.Sqrt(2));
+        }
+
+        public float Y2D()
+        {
+            return (float)(275 + Z + Y / Math.Sqrt(2));
         }
     }
 }

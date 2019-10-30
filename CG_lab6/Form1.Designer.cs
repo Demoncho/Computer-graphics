@@ -75,6 +75,7 @@
             this.radioButton_izom = new System.Windows.Forms.RadioButton();
             this.button_save = new System.Windows.Forms.Button();
             this.button_load = new System.Windows.Forms.Button();
+            this.button_rotation_figure = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_3d_picture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -482,7 +483,7 @@
             // 
             this.radioButton_izom.AutoSize = true;
             this.radioButton_izom.Location = new System.Drawing.Point(15, 517);
-            this.radioButton_izom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radioButton_izom.Margin = new System.Windows.Forms.Padding(2);
             this.radioButton_izom.Name = "radioButton_izom";
             this.radioButton_izom.Size = new System.Drawing.Size(104, 17);
             this.radioButton_izom.TabIndex = 45;
@@ -509,11 +510,22 @@
             this.button_load.UseVisualStyleBackColor = true;
             this.button_load.Click += new System.EventHandler(this.button_load_Click);
             // 
+            // button_rotation_figure
+            // 
+            this.button_rotation_figure.Location = new System.Drawing.Point(463, 568);
+            this.button_rotation_figure.Name = "button_rotation_figure";
+            this.button_rotation_figure.Size = new System.Drawing.Size(110, 23);
+            this.button_rotation_figure.TabIndex = 48;
+            this.button_rotation_figure.Text = "Фигура вращения";
+            this.button_rotation_figure.UseVisualStyleBackColor = true;
+            this.button_rotation_figure.Click += new System.EventHandler(this.button_rotation_figure_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(794, 631);
+            this.Controls.Add(this.button_rotation_figure);
             this.Controls.Add(this.button_load);
             this.Controls.Add(this.button_save);
             this.Controls.Add(this.radioButton_izom);
@@ -619,6 +631,7 @@
         private System.Windows.Forms.RadioButton radioButton_izom;
         private System.Windows.Forms.Button button_save;
         private System.Windows.Forms.Button button_load;
+        private System.Windows.Forms.Button button_rotation_figure;
     }
 }
 
