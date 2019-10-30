@@ -637,6 +637,10 @@ namespace CG_lab6
                 }
             }
 
+            if (radioButton_izom.Checked)
+            {
+                return new double[4, 4] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 0, -1/100 }, { 0, 0, 0, 1 } };
+            }
             return new double[4, 4] { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
         }
 
@@ -647,8 +651,29 @@ namespace CG_lab6
             {
                 double[,] old_matr = { { 0, 0, 0, polyhedron_points[i].X }, { 0, 0, 0, polyhedron_points[i].Y }, { 0, 0, 0, polyhedron_points[i].Z }, { 0, 0, 0, 1 } };
                 double[,] koeff = get_projection_koeff();
-                double[,] new_matr = matrix_multiplication(koeff,  old_matr);
-                projection_points[i] = get_point_from_matrix_colon(new_matr);
+                if (!radioButton_izom.Checked)
+                {
+
+                    double[,] new_matr = matrix_multiplication(koeff, old_matr);
+                    projection_points[i] = get_point_from_matrix_colon(new_matr);
+                }
+                else
+                {
+                    //double[,] old_matr1 = { { 0, 0, 0, 0 }, { polyhedron_points[i].X, polyhedron_points[i].Y, polyhedron_points[i].Z, 1 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
+
+                    //double[,] new_matr = matrix_multiplication(koeff, old_matr1);
+                    //projection_points[i] = get_point_from_matrix_colon(new_matr);
+                    double[,] vec = { { polyhedron_points[i].X, polyhedron_points[i].Y, polyhedron_points[i].Z, 1 } };
+                    double[,] res = { { 0, 0, 0, 0 } };
+                    for (int i1 = 0; i1 < 1; i1++)
+                        for (int j = 0; j < 4; j++)
+                            for (int k = 0; k < 4; k++)
+                                res[i1, k] += vec[i1, j] * koeff[j, k];
+                    res[0, 0] /= (1 - polyhedron_points[i].Z / 100);
+                    res[0, 1] /= (1 - polyhedron_points[i].Z / 100);
+                    res[0, 3] = 1;
+                    projection_points[i] = new Point3d((float)res[0, 0], (float)res[0, 1], 0);
+                }
             }
             redraw_with_projection();
         }
