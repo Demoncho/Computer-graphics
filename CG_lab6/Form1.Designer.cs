@@ -76,6 +76,10 @@
             this.button_save = new System.Windows.Forms.Button();
             this.button_load = new System.Windows.Forms.Button();
             this.button_rotation_figure = new System.Windows.Forms.Button();
+            this.draw_segment = new System.Windows.Forms.Button();
+            this.segment_x0 = new System.Windows.Forms.TextBox();
+            this.segment_x1 = new System.Windows.Forms.TextBox();
+            this.segment_range = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_3d_picture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -520,11 +524,46 @@
             this.button_rotation_figure.UseVisualStyleBackColor = true;
             this.button_rotation_figure.Click += new System.EventHandler(this.button_rotation_figure_Click);
             // 
+            // draw_segment
+            // 
+            this.draw_segment.Location = new System.Drawing.Point(631, 595);
+            this.draw_segment.Name = "draw_segment";
+            this.draw_segment.Size = new System.Drawing.Size(117, 35);
+            this.draw_segment.TabIndex = 49;
+            this.draw_segment.Text = "Нарисовать график 2 переменных";
+            this.draw_segment.UseVisualStyleBackColor = true;
+            this.draw_segment.Click += new System.EventHandler(this.draw_segment_Click);
+            // 
+            // segment_x0
+            // 
+            this.segment_x0.Location = new System.Drawing.Point(601, 568);
+            this.segment_x0.Name = "segment_x0";
+            this.segment_x0.Size = new System.Drawing.Size(54, 20);
+            this.segment_x0.TabIndex = 50;
+            // 
+            // segment_x1
+            // 
+            this.segment_x1.Location = new System.Drawing.Point(661, 568);
+            this.segment_x1.Name = "segment_x1";
+            this.segment_x1.Size = new System.Drawing.Size(52, 20);
+            this.segment_x1.TabIndex = 51;
+            // 
+            // segment_range
+            // 
+            this.segment_range.Location = new System.Drawing.Point(719, 568);
+            this.segment_range.Name = "segment_range";
+            this.segment_range.Size = new System.Drawing.Size(49, 20);
+            this.segment_range.TabIndex = 52;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(794, 631);
+            this.Controls.Add(this.segment_range);
+            this.Controls.Add(this.segment_x1);
+            this.Controls.Add(this.segment_x0);
+            this.Controls.Add(this.draw_segment);
             this.Controls.Add(this.button_rotation_figure);
             this.Controls.Add(this.button_load);
             this.Controls.Add(this.button_save);
@@ -632,6 +671,10 @@
         private System.Windows.Forms.Button button_save;
         private System.Windows.Forms.Button button_load;
         private System.Windows.Forms.Button button_rotation_figure;
+        private System.Windows.Forms.Button draw_segment;
+        private System.Windows.Forms.TextBox segment_x0;
+        private System.Windows.Forms.TextBox segment_x1;
+        private System.Windows.Forms.TextBox segment_range;
     }
 }
 
