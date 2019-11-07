@@ -32,7 +32,7 @@ namespace CG_lab6
         List<Point3d> finish_rotation_figure_points = new List<Point3d>();
         List<Point3d> rotation_figure_draw_points = new List<Point3d>();
         Polyhedron main_polyhedron = new Polyhedron();
-        Line3d line = new Line3d(new Point3d(), new Point3d());
+        Line3d line = new Line3d();
         public Form1()
         {
             InitializeComponent();
@@ -49,11 +49,12 @@ namespace CG_lab6
 
         }
 
-        private void button_clear_Click(object sender, EventArgs e)
+        private void button_clear_Click(object sender, EventArgs e) // Кнопка очистки pictureBox 
         {
-            bool is_drawn = false;
-            bool not_rotation = true;
-            bool first_rotation_figure = false;
+            is_segment = false;
+            is_drawn = false;
+            not_rotation = true;
+            first_rotation_figure = false;
             make_all_invisible();
             polyhedron_points.Clear();
             projection_points.Clear();
@@ -64,7 +65,7 @@ namespace CG_lab6
             pictureBox_3d_picture.Refresh();
         }
 
-        private void button_add_tetrahedron_Click(object sender, EventArgs e)
+        private void button_add_tetrahedron_Click(object sender, EventArgs e) // Кнопка добавления тетраэдра
         {
             if (is_drawn == false)
             {
@@ -108,7 +109,7 @@ namespace CG_lab6
             }
         }
 
-        private void comboBox_action_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBox_action_SelectedIndexChanged(object sender, EventArgs e) // Появления необходимых окон при выборе действия
         {
             if (comboBox_action.Text == "" || !is_drawn)
             {
@@ -193,7 +194,7 @@ namespace CG_lab6
             }
         }
 
-        private void button_action_Click(object sender, EventArgs e)
+        private void button_action_Click(object sender, EventArgs e) // Кнопка "применить"
         {
             if (comboBox_action.Text == "")
             {
@@ -284,16 +285,16 @@ namespace CG_lab6
                         int z1 = Int32.Parse(textBox_z1_line.Text);
                         int x2 = Int32.Parse(textBox_x2_line.Text);
                         int y2 = Int32.Parse(textBox_y2_line.Text);
-                        int z2 = Int32.Parse(textBox_z2_line.Text);*/
+                        int z2 = Int32.Parse(textBox_z2_line.Text);                       
+                        line = new Line3d(new Point3d(x1, y1, z1), new Point3d(x2, y2, z2));*/
                         int angle_turn = Int32.Parse(textBox_angle.Text);
-                        //Line3d line = new Line3d(new Point3d(x1, y1, z1), new Point3d(x2, y2, z2));
                         turn_line(angle_turn);
                         break;
                 }
             }
         }
 
-        private void change_position(int delta_x, int delta_y, int delta_z)
+        private void change_position(int delta_x, int delta_y, int delta_z) // Сдвиг
         {
             for (int i = 0; i < polyhedron_points.Count; ++i)
             {
@@ -308,7 +309,7 @@ namespace CG_lab6
             else redraw_rotation_figure();
         }
 
-        private void turn_x_far(int angle)
+        private void turn_x_far(int angle) //Поворот вокруг оси X
         {
             double cos = Math.Cos(Math.PI / 180 * angle);
             double sin = Math.Sin(Math.PI / 180 * angle);
@@ -329,7 +330,7 @@ namespace CG_lab6
             else if (!first_rotation_figure) redraw_rotation_figure();
         }
 
-        private void turn_y_far(int angle)
+        private void turn_y_far(int angle) //Поворот вокруг оси Y
         {
             double cos = Math.Cos(Math.PI / 180 * angle);
             double sin = Math.Sin(Math.PI / 180 * angle);
@@ -350,7 +351,7 @@ namespace CG_lab6
             else if (!first_rotation_figure) redraw_rotation_figure();
         }
 
-        private void turn_z_far(int angle)
+        private void turn_z_far(int angle) //Поворот вокруг оси Z
         {
             double cos = Math.Cos(Math.PI / 180 * angle);
             double sin = Math.Sin(Math.PI / 180 * angle);
@@ -372,7 +373,7 @@ namespace CG_lab6
             else if (!first_rotation_figure) redraw_rotation_figure();
         }
 
-        private void turn_x(int angle)
+        private void turn_x(int angle) // Поворот по прямой через  ось X 
         {
             double cos = Math.Cos(Math.PI / 180 * angle);
             double sin = Math.Sin(Math.PI / 180 * angle);
@@ -393,7 +394,7 @@ namespace CG_lab6
             else redraw_rotation_figure();
         }
 
-        private void turn_y(int angle)
+        private void turn_y(int angle) // Поворот по прямой через  ось Y
         {
             double cos = Math.Cos(Math.PI / 180 * angle);
             double sin = Math.Sin(Math.PI / 180 * angle);
@@ -414,7 +415,7 @@ namespace CG_lab6
             else redraw_rotation_figure();
         }
 
-        private void turn_z(int angle)
+        private void turn_z(int angle) // Поворот по прямой через  ось Z
         {
             double cos = Math.Cos(Math.PI / 180 * angle);
             double sin = Math.Sin(Math.PI / 180 * angle);
@@ -435,7 +436,7 @@ namespace CG_lab6
             else redraw_rotation_figure();
         }
 
-        private void mirror_x()
+        private void mirror_x() //Отражение по оси X
         {
             for (int i = 0; i < polyhedron_points.Count; ++i)
             {
@@ -453,7 +454,7 @@ namespace CG_lab6
             else redraw_rotation_figure();
         }
 
-        private void mirror_y()
+        private void mirror_y() //Отражение по оси Y
         {
             for (int i = 0; i < polyhedron_points.Count; ++i)
             {
@@ -471,7 +472,7 @@ namespace CG_lab6
             else redraw_rotation_figure();
         }
 
-        private void mirror_z()
+        private void mirror_z() //Отражение по оси Z
         {
             for (int i = 0; i < polyhedron_points.Count; ++i)
             {
@@ -489,7 +490,7 @@ namespace CG_lab6
             else redraw_rotation_figure();
         }
 
-        private void scaling(float coef_x, float coef_y, float coef_z)
+        private void scaling(float coef_x, float coef_y, float coef_z) //Масштабирование отсносительно начальной точки
         {
             /* length *= coef;
              float length_2 = (float)(length / Math.Sqrt(2));
@@ -516,7 +517,7 @@ namespace CG_lab6
             else redraw_rotation_figure();
         }
 
-        private void scaling_center(float coef)
+        private void scaling_center(float coef) //Масштабирование отсносительно центра
         {
             Point3d center = mass_center();
             for (int i = 0; i < polyhedron_points.Count; ++i)
@@ -535,7 +536,7 @@ namespace CG_lab6
             else redraw_rotation_figure();
         }
 
-        private void turn_line(int angle)
+        private void turn_line(int angle) //Поворот вокруг линии
         {
             Point3d vect = new Point3d(line.to.X - line.from.X, line.to.Y - line.from.Y, line.to.Z - line.from.Z);
             float length_line = (float)Math.Sqrt((line.to.X - line.from.X) * (line.to.X - line.from.X) + (line.to.Y - line.from.Y) * (line.to.Y - line.from.Y) + (line.to.Z - line.from.Z) * (line.to.Z - line.from.Z));
@@ -543,15 +544,38 @@ namespace CG_lab6
 
             double cos = Math.Cos(Math.PI / 180 * angle);
             double sin = Math.Sin(Math.PI / 180 * angle);
+            double l = unit.X;
+            double m = unit.Y;
+            double n = unit.Z;
+            double d = Math.Sqrt(unit.Y * unit.Y + unit.Z * unit.Z);
 
             for (int i = 0; i < polyhedron_points.Count; ++i)
             {
                 double[,] old_matr = { { 0, 0, 0, polyhedron_points[i].X }, { 0, 0, 0, polyhedron_points[i].Y }, { 0, 0, 0, polyhedron_points[i].Z }, { 0, 0, 0, 1 } };
+                double[,] t = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { -(line.to.X + line.from.X) / 2, -(line.to.Y + line.from.Y) / 2, -(line.to.Z + line.from.Z) / 2, 1 } };
                 double[,] new_matr = { {unit.X*unit.X + cos* (1 - unit.X * unit.X), unit.X*(1 - cos)*unit.Y + unit.Z*sin, unit.X*(1-cos)*unit.Z - unit.Y*sin, 0 },
                     {unit.X*(1-cos)*unit.Y - unit.Z*sin, unit.Y*unit.Y + cos*(1 - unit.Y*unit.Y), unit.Y*(1-cos)*unit.Z + unit.X*sin, 0 },
                     {unit.X*(1-cos)*unit.Z + unit.Y*sin, unit.Y*(1-cos)*unit.Z - unit.X*sin ,unit.Z*unit.Z + cos* (1 - unit.Z * unit.Z), 0 },
                     {0, 0, 0, 1 } };
+                double[,] t_minus = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { (line.to.X + line.from.X) / 2, (line.to.Y + line.from.Y) / 2, (line.to.Z + line.from.Z) / 2, 1 } };
+                /*double[,] t = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0}, { -(line.to.X + line.from.X) / 2, -(line.to.Y + line.from.Y) / 2, -(line.to.Z + line.from.Z) / 2, 1 } };
+                double[,] Rx = { { 1 , 0, 0, 0 }, { 0, n / d , m / d, 0 }, { 0, - m / d, n / d, 0}, { 0, 0, 0, 1 } };
+                double[,] Ry = { { l, 0, d, 0}, { 0, 1, 0, 0}, { -d, 0, l, 0 }, { 0, 0, 0, 1 } };
+                double[,] Rz = { { cos, sin, 0, 0 }, { -sin, cos, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 0, 1 } };
+                double[,] t_minus = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { (line.to.X + line.from.X) / 2, (line.to.Y + line.from.Y) / 2, (line.to.Z + line.from.Z) / 2, 1 } };
+                double[,] Rx_minus = { { 1, 0, 0, 0 }, { 0, - n / d, - m / d, 0 }, { 0, m / d, - n / d, 0 }, { 0, 0, 0, 1 } };
+                double[,] Ry_minus = { { - l, 0, - d, 0 }, { 0, 1, 0, 0 }, { d, 0, - l, 0 }, { 0, 0, 0, 1 } };*/
+
+                //old_matr = matrix_multiplication(t, old_matr);
                 old_matr = matrix_multiplication(new_matr, old_matr);
+                //old_matr = matrix_multiplication(t_minus, old_matr);
+                /*old_matr = matrix_multiplication(t, old_matr);
+                old_matr = matrix_multiplication(Rx, old_matr);
+                old_matr = matrix_multiplication(Ry, old_matr);
+                old_matr = matrix_multiplication(Rz, old_matr);
+                old_matr = matrix_multiplication(Ry_minus, old_matr);
+                old_matr = matrix_multiplication(Rx_minus, old_matr);
+                old_matr = matrix_multiplication(t_minus, old_matr);*/
                 polyhedron_points[i] = get_point_from_matrix_colon(old_matr);
             }
             if (is_segment) segment_redraw();
@@ -610,7 +634,7 @@ namespace CG_lab6
             pictureBox_3d_picture.Refresh();
         }
 
-        private void make_all_invisible()
+        private void make_all_invisible() // Скрыть все поля в приложении
         {
             button_draw_line.Visible = false;
             label_delta_X.Visible = false;
@@ -657,7 +681,7 @@ namespace CG_lab6
             return new Point3d(x / size, y / size, z / size);
         }
 
-        private void button_draw_line_Click(object sender, EventArgs e)
+        private void button_draw_line_Click(object sender, EventArgs e) //Нарисовать прямую для поворота вокруг нее
         {
             float x1 = float.Parse(textBox_x1_line.Text);
             float y1 = float.Parse(textBox_y1_line.Text);
@@ -743,7 +767,7 @@ namespace CG_lab6
 
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Лабораторная работа №7. Построение трёхмерных моделей !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        private void button_load_Click(object sender, EventArgs e)
+        private void button_load_Click(object sender, EventArgs e) //Кнопка загрузки 3d модели (test.txt)
         {
             var dialog = new OpenFileDialog();
             dialog.InitialDirectory = Environment.CurrentDirectory.Replace("bin\\Debug", "");
@@ -754,7 +778,7 @@ namespace CG_lab6
             }
         }
 
-        private void parse(string file_name)
+        private void parse(string file_name) // Чтение из файла
         {
             string[] lines = File.ReadAllLines(file_name);
             foreach (string line in lines)
@@ -774,7 +798,7 @@ namespace CG_lab6
             draw_main_polyhedron();
         }
 
-        private void draw_main_polyhedron()
+        private void draw_main_polyhedron() //Нарисовать многогранник по граням
         {
             is_drawn = true;
             foreach (Polygon3d polygon in main_polyhedron.polygons)
@@ -797,7 +821,7 @@ namespace CG_lab6
             pictureBox_3d_picture.Refresh();
         }
 
-        private void button_rotation_figure_Click(object sender, EventArgs e)
+        private void button_rotation_figure_Click(object sender, EventArgs e) //Кнопка создания фигуры вращения
         {
             List<Point3d> rotation_points = new List<Point3d>();
             using (Rotation_figure form = new Rotation_figure())
@@ -812,7 +836,7 @@ namespace CG_lab6
             }
         }
 
-        private void draw_rotation_figure(List<Point3d> rotation_points, char axis, int count)
+        private void draw_rotation_figure(List<Point3d> rotation_points, char axis, int count) // Нарисовать фигуру вращения
         {
             first_rotation_figure = true;
             /*pictureBox_3d_picture.Image = new Bitmap(pictureBox_3d_picture.Width, pictureBox_3d_picture.Height);
@@ -878,7 +902,7 @@ namespace CG_lab6
             pictureBox_3d_picture.Refresh();*/
         }
 
-        private void redraw_rotation_figure()
+        private void redraw_rotation_figure() //Перерисовать фигуру вращения после преобразований
         {
             pictureBox_3d_picture.Image = new Bitmap(pictureBox_3d_picture.Width, pictureBox_3d_picture.Height);
             g = Graphics.FromImage(pictureBox_3d_picture.Image);
@@ -920,11 +944,13 @@ namespace CG_lab6
         private float segment_func(float x, float y)
         {
             return x * x * x + (float)Math.Sin(y) * (float)Math.Cos(y);
+            //return x + y;
         }
 
         private void draw_segment_Click(object sender, EventArgs e)
         {
             is_segment = true;
+            is_drawn = true;
             float x0, y0, x1, y1;
             int range;
 
