@@ -306,7 +306,7 @@ namespace CG_lab6
             }
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
-            else redraw_rotation_figure();
+            else redraw_rotation_figure1();
         }
 
         private void turn_x_far(int angle) //Поворот вокруг оси X
@@ -327,7 +327,7 @@ namespace CG_lab6
             }
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
-            else if (!first_rotation_figure) redraw_rotation_figure();
+            else if (!first_rotation_figure) redraw_rotation_figure1();
         }
 
         private void turn_y_far(int angle) //Поворот вокруг оси Y
@@ -348,7 +348,7 @@ namespace CG_lab6
             }
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
-            else if (!first_rotation_figure) redraw_rotation_figure();
+            else if (!first_rotation_figure) redraw_rotation_figure1();
         }
 
         private void turn_z_far(int angle) //Поворот вокруг оси Z
@@ -370,7 +370,7 @@ namespace CG_lab6
             }
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
-            else if (!first_rotation_figure) redraw_rotation_figure();
+            else if (!first_rotation_figure) redraw_rotation_figure1();
         }
 
         private void turn_x(int angle) // Поворот по прямой через  ось X 
@@ -391,7 +391,7 @@ namespace CG_lab6
             }
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
-            else redraw_rotation_figure();
+            else redraw_rotation_figure1();
         }
 
         private void turn_y(int angle) // Поворот по прямой через  ось Y
@@ -412,7 +412,7 @@ namespace CG_lab6
             }
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
-            else redraw_rotation_figure();
+            else redraw_rotation_figure1();
         }
 
         private void turn_z(int angle) // Поворот по прямой через  ось Z
@@ -433,7 +433,7 @@ namespace CG_lab6
             }
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
-            else redraw_rotation_figure();
+            else redraw_rotation_figure1();
         }
 
         private void mirror_x() //Отражение по оси X
@@ -451,7 +451,7 @@ namespace CG_lab6
             }
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
-            else redraw_rotation_figure();
+            else redraw_rotation_figure1();
         }
 
         private void mirror_y() //Отражение по оси Y
@@ -469,7 +469,7 @@ namespace CG_lab6
             }
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
-            else redraw_rotation_figure();
+            else redraw_rotation_figure1();
         }
 
         private void mirror_z() //Отражение по оси Z
@@ -487,7 +487,7 @@ namespace CG_lab6
             }
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
-            else redraw_rotation_figure();
+            else redraw_rotation_figure1();
         }
 
         private void scaling(float coef_x, float coef_y, float coef_z) //Масштабирование отсносительно начальной точки
@@ -514,7 +514,7 @@ namespace CG_lab6
             }
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
-            else redraw_rotation_figure();
+            else redraw_rotation_figure1();
         }
 
         private void scaling_center(float coef) //Масштабирование отсносительно центра
@@ -533,7 +533,7 @@ namespace CG_lab6
             }
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
-            else redraw_rotation_figure();
+            else redraw_rotation_figure1();
         }
 
         private void turn_line(int angle) //Поворот вокруг линии
@@ -580,7 +580,7 @@ namespace CG_lab6
             }
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
-            else redraw_rotation_figure();
+            else redraw_rotation_figure1();
         }
 
         private double[,] matrix_multiplication(double[,] matr1, double[,] matr2) // Умножение матриц
@@ -831,9 +831,112 @@ namespace CG_lab6
                     count_rotation_figure = form.Count;
                     axis_rotation_figure = form.Axis;
                     rotation_points = form.Points;
-                    draw_rotation_figure(rotation_points, axis_rotation_figure, count_rotation_figure);
+                    draw_rotation_figure1(rotation_points, axis_rotation_figure, count_rotation_figure);
                 }
             }
+        }
+
+        private void draw_rotation_figure1(List<Point3d> rotation_points, char axis, int count)
+        {
+            first_rotation_figure = true;
+            not_rotation = false;
+            is_drawn = true;
+
+            int angle = 360 / count;
+
+            polyhedron_points = new List<Point3d>(rotation_points);
+            start_rotation_figure_points = new List<Point3d>(rotation_points);
+            rotation_figure_draw_points = new List<Point3d>(rotation_points);
+            List<Point3d> old_points= new List<Point3d>(rotation_points);
+
+
+            /*for (int i = 0; i < polyhedron_points.Count - 1; ++i)
+            {
+                g.DrawLine(pen, polyhedron_points[i].To2D(), polyhedron_points[i + 1].To2D());
+            }
+            g.DrawLine(pen, polyhedron_points[0].To2D(), polyhedron_points[polyhedron_points.Count - 1].To2D());*/
+
+            for (int i = 0; i < count; ++i)
+            {
+                for (int j = 0; j < polyhedron_points.Count - 1; ++j)
+                {
+                    g.DrawLine(pen, polyhedron_points[j].To2D(), polyhedron_points[j + 1].To2D());
+                }
+
+                //g.DrawLine(pen, polyhedron_points[0].To2D(), polyhedron_points[polyhedron_points.Count - 1].To2D());
+                if (axis == 'X')
+                {
+                    turn_x_far(angle);
+                }
+                if (axis == 'Y')
+                {
+                    turn_y_far(angle);
+                }
+                if (axis == 'Z')
+                {
+                    turn_z_far(angle);
+                }
+
+                for (int j = 0; j < polyhedron_points.Count; ++j)
+                {
+                    g.DrawLine(pen, polyhedron_points[j].To2D(), old_points[j].To2D());
+                }
+
+                for (int j = 0; j < polyhedron_points.Count; ++j)
+                {
+                    //g.FillEllipse(new SolidBrush(Color.Black), new Rectangle((int)polyhedron_points[j].X2D(), (int)polyhedron_points[j].Y2D(), 3, 3));
+                    old_points[j] = polyhedron_points[j];
+                }
+
+                foreach (Point3d point in polyhedron_points)
+                {
+                   // g.FillEllipse(new SolidBrush(Color.Black), new Rectangle((int)point.X2D(), (int)point.Y2D(), 3, 3));
+                    rotation_figure_draw_points.Add(point);
+                }
+                /* for (int j = 0; j < polyhedron_points.Count - 1; ++j)
+                 {
+                     g.DrawLine(pen, polyhedron_points[j].To2D(), polyhedron_points[j + 1].To2D());
+                 }
+
+                 g.DrawLine(pen, polyhedron_points[0].To2D(), polyhedron_points[polyhedron_points.Count - 1].To2D());*/
+            }
+
+           /* for (int i = 0; i < polyhedron_points.Count - 1; ++i)
+            {
+                g.DrawLine(pen, polyhedron_points[i].To2D(), polyhedron_points[i + 1].To2D());
+            }
+
+            g.DrawLine(pen, polyhedron_points[0].To2D(), polyhedron_points[polyhedron_points.Count - 1].To2D());*/
+
+            //polyhedron_points = start_rotation_figure_points;]
+            finish_rotation_figure_points = new List<Point3d>(polyhedron_points);
+            polyhedron_points = new List<Point3d>(rotation_figure_draw_points);
+            first_rotation_figure = false;
+
+            pictureBox_3d_picture.Refresh();
+        }
+
+        private void redraw_rotation_figure1()
+        {
+            pictureBox_3d_picture.Image = new Bitmap(pictureBox_3d_picture.Width, pictureBox_3d_picture.Height);
+            g = Graphics.FromImage(pictureBox_3d_picture.Image);
+            g.Clear(Color.White);
+            int count = start_rotation_figure_points.Count;
+            for (int i = 1; i < polyhedron_points.Count; ++i)
+            {
+                // g.DrawLine(pen, polyhedron_points[i].To2D(), polyhedron_points[i].To2D());
+                if (i % count != 0)
+                    g.DrawLine(pen, polyhedron_points[i].To2D(), polyhedron_points[i - 1].To2D());
+            }
+
+            
+            for (int i = 0; i < polyhedron_points.Count - count; ++i)
+            {
+                g.DrawLine(pen, polyhedron_points[i].To2D(), polyhedron_points[i + count].To2D());
+            }
+
+           // start_rotation_figure_points = new List<Point3d>(polyhedron_points);
+            pictureBox_3d_picture.Refresh();
         }
 
         private void draw_rotation_figure(List<Point3d> rotation_points, char axis, int count) // Нарисовать фигуру вращения
@@ -943,8 +1046,7 @@ namespace CG_lab6
 
         private float segment_func(float x, float y)
         {
-            return x * x * x + (float)Math.Sin(y) * (float)Math.Cos(y);
-            //return x + y;
+            return (float)Math.Sin(x) * (float)Math.Cos(y);
         }
 
         private void draw_segment_Click(object sender, EventArgs e)
@@ -979,8 +1081,6 @@ namespace CG_lab6
                     polyhedron_points.Add(new Point3d(i, j + step, segment_func(i, j + step)));
                     polyhedron_points.Add(new Point3d(i - step, j + step, segment_func(i - step, j + step)));
 
-                    //Face face = new Face(new List<Line3d>() { rib1, rib2, rib3, rib4 });
-                    // shapeFaces.Add(face);
                 }
             segment_redraw();
         }
