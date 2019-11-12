@@ -80,7 +80,21 @@
             this.segment_x0 = new System.Windows.Forms.TextBox();
             this.segment_x1 = new System.Windows.Forms.TextBox();
             this.segment_range = new System.Windows.Forms.TextBox();
+            this.button_add_cube = new System.Windows.Forms.Button();
+            this.label_view = new System.Windows.Forms.Label();
+            this.groupBox_from = new System.Windows.Forms.GroupBox();
+            this.textBox_x1_from = new System.Windows.Forms.TextBox();
+            this.textBox_y1_from = new System.Windows.Forms.TextBox();
+            this.textBox_z1_from = new System.Windows.Forms.TextBox();
+            this.groupBox_to = new System.Windows.Forms.GroupBox();
+            this.textBox_z2_to = new System.Windows.Forms.TextBox();
+            this.textBox_y2_to = new System.Windows.Forms.TextBox();
+            this.textBox_x2_to = new System.Windows.Forms.TextBox();
+            this.button_draw_view = new System.Windows.Forms.Button();
+            this.button_delete_polygons = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_3d_picture)).BeginInit();
+            this.groupBox_from.SuspendLayout();
+            this.groupBox_to.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox_3d_picture
@@ -103,7 +117,7 @@
             // 
             // button_add_tetrahedron
             // 
-            this.button_add_tetrahedron.Location = new System.Drawing.Point(12, 77);
+            this.button_add_tetrahedron.Location = new System.Drawing.Point(12, 66);
             this.button_add_tetrahedron.Name = "button_add_tetrahedron";
             this.button_add_tetrahedron.Size = new System.Drawing.Size(220, 23);
             this.button_add_tetrahedron.TabIndex = 2;
@@ -164,7 +178,7 @@
             // label_coodrinates
             // 
             this.label_coodrinates.AutoSize = true;
-            this.label_coodrinates.Location = new System.Drawing.Point(39, 121);
+            this.label_coodrinates.Location = new System.Drawing.Point(38, 121);
             this.label_coodrinates.Name = "label_coodrinates";
             this.label_coodrinates.Size = new System.Drawing.Size(171, 13);
             this.label_coodrinates.TabIndex = 9;
@@ -555,11 +569,122 @@
             this.segment_range.Size = new System.Drawing.Size(49, 20);
             this.segment_range.TabIndex = 52;
             // 
+            // button_add_cube
+            // 
+            this.button_add_cube.Location = new System.Drawing.Point(12, 95);
+            this.button_add_cube.Name = "button_add_cube";
+            this.button_add_cube.Size = new System.Drawing.Size(220, 23);
+            this.button_add_cube.TabIndex = 53;
+            this.button_add_cube.Text = "Добавить куб";
+            this.button_add_cube.UseVisualStyleBackColor = true;
+            this.button_add_cube.Click += new System.EventHandler(this.button_add_cube_Click);
+            // 
+            // label_view
+            // 
+            this.label_view.AutoSize = true;
+            this.label_view.Location = new System.Drawing.Point(256, 619);
+            this.label_view.Name = "label_view";
+            this.label_view.Size = new System.Drawing.Size(82, 13);
+            this.label_view.TabIndex = 54;
+            this.label_view.Text = "Вектор обзора";
+            // 
+            // groupBox_from
+            // 
+            this.groupBox_from.Controls.Add(this.textBox_z1_from);
+            this.groupBox_from.Controls.Add(this.textBox_y1_from);
+            this.groupBox_from.Controls.Add(this.textBox_x1_from);
+            this.groupBox_from.Location = new System.Drawing.Point(342, 597);
+            this.groupBox_from.Name = "groupBox_from";
+            this.groupBox_from.Size = new System.Drawing.Size(117, 44);
+            this.groupBox_from.TabIndex = 55;
+            this.groupBox_from.TabStop = false;
+            this.groupBox_from.Text = "Начало";
+            // 
+            // textBox_x1_from
+            // 
+            this.textBox_x1_from.Location = new System.Drawing.Point(2, 19);
+            this.textBox_x1_from.Name = "textBox_x1_from";
+            this.textBox_x1_from.Size = new System.Drawing.Size(35, 20);
+            this.textBox_x1_from.TabIndex = 0;
+            // 
+            // textBox_y1_from
+            // 
+            this.textBox_y1_from.Location = new System.Drawing.Point(41, 19);
+            this.textBox_y1_from.Name = "textBox_y1_from";
+            this.textBox_y1_from.Size = new System.Drawing.Size(35, 20);
+            this.textBox_y1_from.TabIndex = 1;
+            // 
+            // textBox_z1_from
+            // 
+            this.textBox_z1_from.Location = new System.Drawing.Point(79, 19);
+            this.textBox_z1_from.Name = "textBox_z1_from";
+            this.textBox_z1_from.Size = new System.Drawing.Size(35, 20);
+            this.textBox_z1_from.TabIndex = 2;
+            // 
+            // groupBox_to
+            // 
+            this.groupBox_to.Controls.Add(this.textBox_z2_to);
+            this.groupBox_to.Controls.Add(this.textBox_y2_to);
+            this.groupBox_to.Controls.Add(this.textBox_x2_to);
+            this.groupBox_to.Location = new System.Drawing.Point(463, 597);
+            this.groupBox_to.Name = "groupBox_to";
+            this.groupBox_to.Size = new System.Drawing.Size(117, 44);
+            this.groupBox_to.TabIndex = 56;
+            this.groupBox_to.TabStop = false;
+            this.groupBox_to.Text = "Конец";
+            // 
+            // textBox_z2_to
+            // 
+            this.textBox_z2_to.Location = new System.Drawing.Point(79, 19);
+            this.textBox_z2_to.Name = "textBox_z2_to";
+            this.textBox_z2_to.Size = new System.Drawing.Size(35, 20);
+            this.textBox_z2_to.TabIndex = 2;
+            // 
+            // textBox_y2_to
+            // 
+            this.textBox_y2_to.Location = new System.Drawing.Point(41, 19);
+            this.textBox_y2_to.Name = "textBox_y2_to";
+            this.textBox_y2_to.Size = new System.Drawing.Size(35, 20);
+            this.textBox_y2_to.TabIndex = 1;
+            // 
+            // textBox_x2_to
+            // 
+            this.textBox_x2_to.Location = new System.Drawing.Point(2, 19);
+            this.textBox_x2_to.Name = "textBox_x2_to";
+            this.textBox_x2_to.Size = new System.Drawing.Size(35, 20);
+            this.textBox_x2_to.TabIndex = 0;
+            // 
+            // button_draw_view
+            // 
+            this.button_draw_view.Location = new System.Drawing.Point(344, 642);
+            this.button_draw_view.Name = "button_draw_view";
+            this.button_draw_view.Size = new System.Drawing.Size(112, 23);
+            this.button_draw_view.TabIndex = 57;
+            this.button_draw_view.Text = "Нарисовать обзор";
+            this.button_draw_view.UseVisualStyleBackColor = true;
+            this.button_draw_view.Click += new System.EventHandler(this.button_draw_view_Click);
+            // 
+            // button_delete_polygons
+            // 
+            this.button_delete_polygons.Location = new System.Drawing.Point(465, 642);
+            this.button_delete_polygons.Name = "button_delete_polygons";
+            this.button_delete_polygons.Size = new System.Drawing.Size(112, 23);
+            this.button_delete_polygons.TabIndex = 58;
+            this.button_delete_polygons.Text = "Убрать грани";
+            this.button_delete_polygons.UseVisualStyleBackColor = true;
+            this.button_delete_polygons.Click += new System.EventHandler(this.button_delete_polygons_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(794, 631);
+            this.ClientSize = new System.Drawing.Size(794, 677);
+            this.Controls.Add(this.button_delete_polygons);
+            this.Controls.Add(this.button_draw_view);
+            this.Controls.Add(this.groupBox_to);
+            this.Controls.Add(this.groupBox_from);
+            this.Controls.Add(this.label_view);
+            this.Controls.Add(this.button_add_cube);
             this.Controls.Add(this.segment_range);
             this.Controls.Add(this.segment_x1);
             this.Controls.Add(this.segment_x0);
@@ -616,6 +741,10 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_3d_picture)).EndInit();
+            this.groupBox_from.ResumeLayout(false);
+            this.groupBox_from.PerformLayout();
+            this.groupBox_to.ResumeLayout(false);
+            this.groupBox_to.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -675,6 +804,18 @@
         private System.Windows.Forms.TextBox segment_x0;
         private System.Windows.Forms.TextBox segment_x1;
         private System.Windows.Forms.TextBox segment_range;
+        private System.Windows.Forms.Button button_add_cube;
+        private System.Windows.Forms.Label label_view;
+        private System.Windows.Forms.GroupBox groupBox_from;
+        private System.Windows.Forms.TextBox textBox_z1_from;
+        private System.Windows.Forms.TextBox textBox_y1_from;
+        private System.Windows.Forms.TextBox textBox_x1_from;
+        private System.Windows.Forms.GroupBox groupBox_to;
+        private System.Windows.Forms.TextBox textBox_z2_to;
+        private System.Windows.Forms.TextBox textBox_y2_to;
+        private System.Windows.Forms.TextBox textBox_x2_to;
+        private System.Windows.Forms.Button button_draw_view;
+        private System.Windows.Forms.Button button_delete_polygons;
     }
 }
 
