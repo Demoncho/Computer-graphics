@@ -93,6 +93,8 @@
             this.button_draw_view = new System.Windows.Forms.Button();
             this.button_delete_polygons = new System.Windows.Forms.Button();
             this.button_camera = new System.Windows.Forms.Button();
+            this.z_bufer = new System.Windows.Forms.Button();
+            this.add_cube_2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_3d_picture)).BeginInit();
             this.groupBox_from.SuspendLayout();
             this.groupBox_to.SuspendLayout();
@@ -677,7 +679,7 @@
             // 
             // button_camera
             // 
-            this.button_camera.Location = new System.Drawing.Point(61, 584);
+            this.button_camera.Location = new System.Drawing.Point(61, 572);
             this.button_camera.Name = "button_camera";
             this.button_camera.Size = new System.Drawing.Size(104, 23);
             this.button_camera.TabIndex = 59;
@@ -685,12 +687,34 @@
             this.button_camera.UseVisualStyleBackColor = true;
             this.button_camera.Click += new System.EventHandler(this.button_camera_Click);
             // 
+            // z_bufer
+            // 
+            this.z_bufer.Location = new System.Drawing.Point(42, 642);
+            this.z_bufer.Name = "z_bufer";
+            this.z_bufer.Size = new System.Drawing.Size(75, 23);
+            this.z_bufer.TabIndex = 59;
+            this.z_bufer.Text = "Z-buffer";
+            this.z_bufer.UseVisualStyleBackColor = true;
+            this.z_bufer.Click += new System.EventHandler(this.z_bufer_Click);
+            // 
+            // add_cube_2
+            // 
+            this.add_cube_2.Location = new System.Drawing.Point(44, 601);
+            this.add_cube_2.Name = "add_cube_2";
+            this.add_cube_2.Size = new System.Drawing.Size(114, 23);
+            this.add_cube_2.TabIndex = 60;
+            this.add_cube_2.Text = "Добавить куб 2";
+            this.add_cube_2.UseVisualStyleBackColor = true;
+            this.add_cube_2.Click += new System.EventHandler(this.add_cube_2_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(794, 677);
             this.Controls.Add(this.button_camera);
+            this.Controls.Add(this.add_cube_2);
+            this.Controls.Add(this.z_bufer);
             this.Controls.Add(this.button_delete_polygons);
             this.Controls.Add(this.button_draw_view);
             this.Controls.Add(this.groupBox_to);
@@ -829,6 +853,8 @@
         private System.Windows.Forms.Button button_draw_view;
         private System.Windows.Forms.Button button_delete_polygons;
         private System.Windows.Forms.Button button_camera;
+        private System.Windows.Forms.Button z_bufer;
+        private System.Windows.Forms.Button add_cube_2;
     }
 }
 
