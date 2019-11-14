@@ -59,3 +59,4 @@ D:\Homework\Computer-graphics\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Rotati
 D:\Homework\Computer-graphics\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.csproj.GenerateResource.cache
 D:\Homework\Computer-graphics\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.exe
 D:\Homework\Computer-graphics\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.pdb
+D:\Homework\CG\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Camera.resources

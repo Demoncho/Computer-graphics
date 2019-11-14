@@ -83,15 +83,16 @@
             this.button_add_cube = new System.Windows.Forms.Button();
             this.label_view = new System.Windows.Forms.Label();
             this.groupBox_from = new System.Windows.Forms.GroupBox();
-            this.textBox_x1_from = new System.Windows.Forms.TextBox();
-            this.textBox_y1_from = new System.Windows.Forms.TextBox();
             this.textBox_z1_from = new System.Windows.Forms.TextBox();
+            this.textBox_y1_from = new System.Windows.Forms.TextBox();
+            this.textBox_x1_from = new System.Windows.Forms.TextBox();
             this.groupBox_to = new System.Windows.Forms.GroupBox();
             this.textBox_z2_to = new System.Windows.Forms.TextBox();
             this.textBox_y2_to = new System.Windows.Forms.TextBox();
             this.textBox_x2_to = new System.Windows.Forms.TextBox();
             this.button_draw_view = new System.Windows.Forms.Button();
             this.button_delete_polygons = new System.Windows.Forms.Button();
+            this.button_camera = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_3d_picture)).BeginInit();
             this.groupBox_from.SuspendLayout();
             this.groupBox_to.SuspendLayout();
@@ -600,12 +601,12 @@
             this.groupBox_from.TabStop = false;
             this.groupBox_from.Text = "Начало";
             // 
-            // textBox_x1_from
+            // textBox_z1_from
             // 
-            this.textBox_x1_from.Location = new System.Drawing.Point(2, 19);
-            this.textBox_x1_from.Name = "textBox_x1_from";
-            this.textBox_x1_from.Size = new System.Drawing.Size(35, 20);
-            this.textBox_x1_from.TabIndex = 0;
+            this.textBox_z1_from.Location = new System.Drawing.Point(79, 19);
+            this.textBox_z1_from.Name = "textBox_z1_from";
+            this.textBox_z1_from.Size = new System.Drawing.Size(35, 20);
+            this.textBox_z1_from.TabIndex = 2;
             // 
             // textBox_y1_from
             // 
@@ -614,12 +615,12 @@
             this.textBox_y1_from.Size = new System.Drawing.Size(35, 20);
             this.textBox_y1_from.TabIndex = 1;
             // 
-            // textBox_z1_from
+            // textBox_x1_from
             // 
-            this.textBox_z1_from.Location = new System.Drawing.Point(79, 19);
-            this.textBox_z1_from.Name = "textBox_z1_from";
-            this.textBox_z1_from.Size = new System.Drawing.Size(35, 20);
-            this.textBox_z1_from.TabIndex = 2;
+            this.textBox_x1_from.Location = new System.Drawing.Point(2, 19);
+            this.textBox_x1_from.Name = "textBox_x1_from";
+            this.textBox_x1_from.Size = new System.Drawing.Size(35, 20);
+            this.textBox_x1_from.TabIndex = 0;
             // 
             // groupBox_to
             // 
@@ -674,11 +675,22 @@
             this.button_delete_polygons.UseVisualStyleBackColor = true;
             this.button_delete_polygons.Click += new System.EventHandler(this.button_delete_polygons_Click);
             // 
+            // button_camera
+            // 
+            this.button_camera.Location = new System.Drawing.Point(61, 584);
+            this.button_camera.Name = "button_camera";
+            this.button_camera.Size = new System.Drawing.Size(104, 23);
+            this.button_camera.TabIndex = 59;
+            this.button_camera.Text = "Задать камеру";
+            this.button_camera.UseVisualStyleBackColor = true;
+            this.button_camera.Click += new System.EventHandler(this.button_camera_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(794, 677);
+            this.Controls.Add(this.button_camera);
             this.Controls.Add(this.button_delete_polygons);
             this.Controls.Add(this.button_draw_view);
             this.Controls.Add(this.groupBox_to);
@@ -816,6 +828,7 @@
         private System.Windows.Forms.TextBox textBox_x2_to;
         private System.Windows.Forms.Button button_draw_view;
         private System.Windows.Forms.Button button_delete_polygons;
+        private System.Windows.Forms.Button button_camera;
     }
 }
 

@@ -1099,5 +1099,19 @@ namespace CG_lab6
 
         }
 
+        private void button_camera_Click(object sender, EventArgs e)
+        {
+            List<Point3d> rotation_points = new List<Point3d>();
+            using (Camera form = new Camera())
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    /*count_rotation_figure = form.Count;
+                    axis_rotation_figure = form.Axis;
+                    rotation_points = form.Points;
+                    draw_rotation_figure(rotation_points, axis_rotation_figure, count_rotation_figure);*/
+                }
+            }
+        }
     }
 }
