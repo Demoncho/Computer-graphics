@@ -13,6 +13,7 @@ namespace CG_lab6
 {
     public partial class Form1 : Form
     {
+        Dictionary<Tuple<float, float>, float> z_buff = new Dictionary<Tuple<float,float>, float>();
         bool is_segment = false;
         bool is_drawn = false;
         bool not_rotation = true;
@@ -1098,6 +1099,119 @@ namespace CG_lab6
                             * Math.Sqrt(second_vector.X * second_vector.X + second_vector.Y * second_vector.Y + second_vector.Z * second_vector.Z)));
 
         }
+        
 
+        private void Z_buffer(Polyhedron polyhedron)
+        {
+            foreach (Polygon3d polygon in polyhedron.polygons)
+            {
+              foreach (Point3d point in polygon.points)
+              {
+                Tuple<float, float> key = Tuple.Create(point.X, point.Z);
+                float value = point.Y;
+                if (z_buff.ContainsKey(key))
+                {
+                  if (z_buff[key] < value)
+                  {
+                    z_buff.Remove(key);
+                    z_buff.Add(key, value);
+                  }
+                }
+                else
+                {
+                  z_buff.Add(key, value);              
+                }
+              }
+            }
+        }
+
+        private void z_bufer_Click(object sender, EventArgs e)
+        {
+            Z_buffer(main_polyhedron);
+            foreach (Polygon3d polygon in main_polyhedron.polygons)
+            {
+                foreach (Point3d point in polygon.points)
+                {
+                    if (z_buff[Tuple.Create(point.X, point.Z)] == point.Y)
+                    {
+                        g.FillEllipse(new SolidBrush(Color.Red), new Rectangle((int)point.X2D(), (int)point.To2D().Y, 5, 5));
+                    }
+                }
+                
+            }
+            z_buff.Clear();
+            pictureBox_3d_picture.Refresh();
+        }
+
+        private void add_cube_2_Click(object sender, EventArgs e)
+        {
+            {
+                    float x = float.Parse(textBox_coordinate_X.Text);
+                    float y = float.Parse(textBox_coordinate_Y.Text);
+                    float z = float.Parse(textBox_coordinate_Z.Text);
+                    length = float.Parse(textBox_coordinate_length.Text);
+                    float length_2 = (float)(length / Math.Sqrt(2));
+                    Point3d start = new Point3d(x, y, z);
+                    Point3d p2 = new Point3d(x + length, y, z);
+                    Point3d p3 = new Point3d(x, y, z + length);
+                    Point3d p4 = new Point3d(x + length, y, z + length);
+                    Point3d p5 = new Point3d(x, y + length, z);
+                    Point3d p6 = new Point3d(x + length, y + length, z);
+                    Point3d p7 = new Point3d(x, y + length, z + length);
+                    Point3d p8 = new Point3d(x + length, y + length, z + length);
+
+                    polyhedron_points.Add(start);
+                    polyhedron_points.Add(p2);
+                    polyhedron_points.Add(p3);
+                    polyhedron_points.Add(p4);
+                    polyhedron_points.Add(p5);
+                    polyhedron_points.Add(p6);
+                    polyhedron_points.Add(p7);
+                    polyhedron_points.Add(p8);
+
+                    projection_points.Add(start);
+                    projection_points.Add(p2);
+                    projection_points.Add(p3);
+                    projection_points.Add(p4);
+                    projection_points.Add(p5);
+                    projection_points.Add(p6);
+                    projection_points.Add(p7);
+                    polyhedron_points.Add(p8);
+
+                    g.DrawLine(pen, start.To2D(), p2.To2D());
+                    g.DrawLine(pen, start.To2D(), p3.To2D());
+                    g.DrawLine(pen, start.To2D(), p5.To2D());
+                    g.DrawLine(pen, p2.To2D(), p6.To2D());
+                    g.DrawLine(pen, p2.To2D(), p4.To2D());
+                    g.DrawLine(pen, p3.To2D(), p4.To2D());
+                    g.DrawLine(pen, p3.To2D(), p7.To2D());
+                    g.DrawLine(pen, p4.To2D(), p8.To2D());
+                    g.DrawLine(pen, p5.To2D(), p7.To2D());
+                    g.DrawLine(pen, p5.To2D(), p6.To2D());
+                    g.DrawLine(pen, p6.To2D(), p8.To2D());
+                    g.DrawLine(pen, p7.To2D(), p8.To2D());
+
+                    Polygon3d polygon_1st = new Polygon3d();
+                    Polygon3d polygon_2nd = new Polygon3d();
+                    Polygon3d polygon_3rd = new Polygon3d();
+                    Polygon3d polygon_4th = new Polygon3d();
+                    Polygon3d polygon_5th = new Polygon3d();
+                    Polygon3d polygon_6th = new Polygon3d();
+
+                    polygon_1st.points.Add(start); polygon_1st.points.Add(p2); polygon_1st.points.Add(p4); polygon_1st.points.Add(p3);
+                    polygon_2nd.points.Add(start); polygon_2nd.points.Add(p5); polygon_2nd.points.Add(p7); polygon_2nd.points.Add(p3);
+                    polygon_3rd.points.Add(p5); polygon_3rd.points.Add(p6); polygon_3rd.points.Add(p8); polygon_3rd.points.Add(p7);
+                    polygon_4th.points.Add(p2); polygon_4th.points.Add(p6); polygon_4th.points.Add(p8); polygon_4th.points.Add(p4);
+                    polygon_5th.points.Add(start); polygon_5th.points.Add(p5); polygon_5th.points.Add(p6); polygon_5th.points.Add(p2);
+                    polygon_6th.points.Add(p3); polygon_6th.points.Add(p7); polygon_6th.points.Add(p8); polygon_6th.points.Add(p4);
+                    main_polyhedron.polygons.Add(polygon_1st);
+                    main_polyhedron.polygons.Add(polygon_2nd);
+                    main_polyhedron.polygons.Add(polygon_3rd);
+                    main_polyhedron.polygons.Add(polygon_4th);
+                    main_polyhedron.polygons.Add(polygon_5th);
+                    main_polyhedron.polygons.Add(polygon_6th);
+                    pictureBox_3d_picture.Refresh();
+            }
+        }
     }
 }
