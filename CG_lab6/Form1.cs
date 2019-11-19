@@ -1108,13 +1108,32 @@ namespace CG_lab6
             {
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    /*count_rotation_figure = form.Count;
-                    axis_rotation_figure = form.Axis;
-                    rotation_points = form.Points;
-                    draw_rotation_figure(rotation_points, axis_rotation_figure, count_rotation_figure);*/
+                    int x1 = form.X1;
+                    int y1 = form.Y1;
+                    int z1 = form.Z1;
+                    int x2 = form.X2;
+                    int y2 = form.Y2;
+                    int z2 = form.Z2;
+                    Point3d p1 = new Point3d(x1, y1, z1);
+                    Point3d p2 = new Point3d(x2, y2, z2);
+                    Point3d vect = new Point3d(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
+                    float length_line = (float)Math.Sqrt((line.to.X - line.from.X) * (line.to.X - line.from.X) + (line.to.Y - line.from.Y) * (line.to.Y - line.from.Y) + (line.to.Z - line.from.Z) * (line.to.Z - line.from.Z));
+                    Point3d unit = new Point3d(vect.X / length_line, vect.Y / length_line, vect.Z / length_line);
+                    make_camera_view(unit, p1);
                 }
             }
         }
+
+        private void make_camera_view(Point3d vector, Point3d start)
+        {
+            Point3d y_vector = new Point3d(0, 1, 0);
+            double angle = angle_between(vector, y_vector);
+            double angle_degrees = angle * 180 / Math.PI;
+            //change_position((int)-start.X,(int)-start.Y,(int)-start.Z);
+            turn_y((int)-angle_degrees);
+        }
+
+
         private void Z_buffer(Polyhedron polyhedron)
         {
             foreach (Polygon3d polygon in polyhedron.polygons)
@@ -1225,6 +1244,25 @@ namespace CG_lab6
                     main_polyhedron.polygons.Add(polygon_5th);
                     main_polyhedron.polygons.Add(polygon_6th);
                     pictureBox_3d_picture.Refresh();
+            }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.A:
+                    turn_x(-1);
+                    break;
+                case Keys.D:
+                    turn_x(1);
+                    break;
+                case Keys.W:
+                    turn_z(-1);
+                    break;
+                case Keys.S:
+                    turn_z(1);
+                    break;
             }
         }
     }

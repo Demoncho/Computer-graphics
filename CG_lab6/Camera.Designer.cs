@@ -28,36 +28,37 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.x1 = new System.Windows.Forms.TextBox();
+            this.y1 = new System.Windows.Forms.TextBox();
+            this.z1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.x2 = new System.Windows.Forms.TextBox();
+            this.y2 = new System.Windows.Forms.TextBox();
+            this.z2 = new System.Windows.Forms.TextBox();
+            this.button_create_camera = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // textBox1
+            // x1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 25);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(50, 20);
-            this.textBox1.TabIndex = 0;
+            this.x1.Location = new System.Drawing.Point(12, 25);
+            this.x1.Name = "x1";
+            this.x1.Size = new System.Drawing.Size(50, 20);
+            this.x1.TabIndex = 0;
             // 
-            // textBox2
+            // y1
             // 
-            this.textBox2.Location = new System.Drawing.Point(68, 25);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(50, 20);
-            this.textBox2.TabIndex = 1;
+            this.y1.Location = new System.Drawing.Point(68, 25);
+            this.y1.Name = "y1";
+            this.y1.Size = new System.Drawing.Size(50, 20);
+            this.y1.TabIndex = 1;
             // 
-            // textBox3
+            // z1
             // 
-            this.textBox3.Location = new System.Drawing.Point(124, 25);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(50, 20);
-            this.textBox3.TabIndex = 2;
+            this.z1.Location = new System.Drawing.Point(124, 25);
+            this.z1.Name = "z1";
+            this.z1.Size = new System.Drawing.Size(50, 20);
+            this.z1.TabIndex = 2;
             // 
             // label1
             // 
@@ -77,40 +78,51 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "Направление обзора";
             // 
-            // textBox4
+            // x2
             // 
-            this.textBox4.Location = new System.Drawing.Point(12, 64);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(50, 20);
-            this.textBox4.TabIndex = 5;
+            this.x2.Location = new System.Drawing.Point(12, 64);
+            this.x2.Name = "x2";
+            this.x2.Size = new System.Drawing.Size(50, 20);
+            this.x2.TabIndex = 5;
             // 
-            // textBox5
+            // y2
             // 
-            this.textBox5.Location = new System.Drawing.Point(68, 64);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(50, 20);
-            this.textBox5.TabIndex = 6;
+            this.y2.Location = new System.Drawing.Point(68, 64);
+            this.y2.Name = "y2";
+            this.y2.Size = new System.Drawing.Size(50, 20);
+            this.y2.TabIndex = 6;
             // 
-            // textBox6
+            // z2
             // 
-            this.textBox6.Location = new System.Drawing.Point(124, 64);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(50, 20);
-            this.textBox6.TabIndex = 7;
+            this.z2.Location = new System.Drawing.Point(124, 64);
+            this.z2.Name = "z2";
+            this.z2.Size = new System.Drawing.Size(50, 20);
+            this.z2.TabIndex = 7;
+            // 
+            // button_create_camera
+            // 
+            this.button_create_camera.Location = new System.Drawing.Point(56, 104);
+            this.button_create_camera.Name = "button_create_camera";
+            this.button_create_camera.Size = new System.Drawing.Size(75, 23);
+            this.button_create_camera.TabIndex = 8;
+            this.button_create_camera.Text = "Создать";
+            this.button_create_camera.UseVisualStyleBackColor = true;
+            this.button_create_camera.Click += new System.EventHandler(this.button_create_camera_Click);
             // 
             // Camera
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(370, 162);
-            this.Controls.Add(this.textBox6);
-            this.Controls.Add(this.textBox5);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.button_create_camera);
+            this.Controls.Add(this.z2);
+            this.Controls.Add(this.y2);
+            this.Controls.Add(this.x2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.z1);
+            this.Controls.Add(this.y1);
+            this.Controls.Add(this.x1);
             this.Name = "Camera";
             this.Text = "Camera";
             this.ResumeLayout(false);
@@ -120,13 +132,14 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox x1;
+        private System.Windows.Forms.TextBox y1;
+        private System.Windows.Forms.TextBox z1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox x2;
+        private System.Windows.Forms.TextBox y2;
+        private System.Windows.Forms.TextBox z2;
+        private System.Windows.Forms.Button button_create_camera;
     }
 }

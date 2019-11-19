@@ -773,9 +773,11 @@
             this.Controls.Add(this.button_add_tetrahedron);
             this.Controls.Add(this.button_clear);
             this.Controls.Add(this.pictureBox_3d_picture);
+            this.KeyPreview = true;
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_3d_picture)).EndInit();
             this.groupBox_from.ResumeLayout(false);
             this.groupBox_from.PerformLayout();
