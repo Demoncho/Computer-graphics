@@ -74,7 +74,8 @@ namespace CG_lab6
 
         private void button_add_tetrahedron_Click(object sender, EventArgs e) // Кнопка добавления тетраэдра
         {
-            if (is_drawn == false)
+            //if (is_drawn == false)
+            if (true)
             {
                 is_drawn = true;
                 float x = float.Parse(textBox_coordinate_X.Text);
@@ -1171,8 +1172,11 @@ namespace CG_lab6
         {
             foreach (Polygon3d polygon in polyhedron.polygons)
             {
-              foreach (Point3d point in polygon.points)
+                List<Tuple<Point3d, Color>> full_polygon = get_full_polygon_from_borders(polygon, position_light, color_object);
+                
+                foreach (Tuple<Point3d, Color> tup_point in full_polygon)
               {
+                Point3d point = tup_point.Item1;
                 Tuple<float, float> key = Tuple.Create(point.X, point.Z);
                 float value = point.Y;
                 if (z_buff.ContainsKey(key))
@@ -1196,11 +1200,15 @@ namespace CG_lab6
             Z_buffer(main_polyhedron);
             foreach (Polygon3d polygon in main_polyhedron.polygons)
             {
-                foreach (Point3d point in polygon.points)
+                List<Tuple<Point3d, Color>> full_polygon = get_full_polygon_from_borders(polygon, position_light, color_object);
+
+                foreach (Tuple<Point3d, Color> tup_point in full_polygon)
                 {
+                    Point3d point = tup_point.Item1;
+             
                     if (z_buff[Tuple.Create(point.X, point.Z)] == point.Y)
                     {
-                        g.FillEllipse(new SolidBrush(Color.Red), new Rectangle((int)point.X2D(), (int)point.To2D().Y, 5, 5));
+                        g.FillEllipse(new SolidBrush(Color.FromArgb(120, ((Math.Abs((int)point.Y) % 255 ) + 100) % 255, 0, 0)), new Rectangle((int)point.X2D(), (int)point.To2D().Y, 5, 5));
                     }
                 }
                 
