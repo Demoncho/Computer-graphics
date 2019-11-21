@@ -1365,6 +1365,9 @@ namespace CG_lab6
 
         private void create_light(Point3d position_light, Color color_object)
         {
+            pictureBox_3d_picture.Image = new Bitmap(pictureBox_3d_picture.Width, pictureBox_3d_picture.Height);
+            g = Graphics.FromImage(pictureBox_3d_picture.Image);
+            g.Clear(Color.White);
             foreach(Polygon3d polygon in main_polyhedron.polygons)
             {
                 List<Tuple<Point3d, Color>> full_polygon = get_full_polygon_from_borders(polygon, position_light, color_object);
@@ -1374,8 +1377,8 @@ namespace CG_lab6
                     double[,] koeff = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 1 } };
                     double[,] new_matr = matrix_multiplication(koeff, old_matr);
                     Point3d aaa = get_point_from_matrix_colon(new_matr);*/
-                    int i = (int)point.Item1.X + 150; // Вот здесь не надо учитывать координаты Z, поэтому лучше всего в ортогональной по Z делать
-                    int j = (int)point.Item1.Y + 150; // 
+                    int i = (int)point.Item1.X + 275; // Вот здесь не надо учитывать координаты Z, поэтому лучше всего в ортогональной по Z делать
+                    int j = (int)point.Item1.Y + 275; // 
                     //g.DrawRectangle(new Pen(point.Item2), point.Item1.X2D(), point.Item1.Y2D(), 1, 1);
                     g.DrawRectangle(new Pen(point.Item2), i, j, 1, 1);
                 }
@@ -1389,6 +1392,7 @@ namespace CG_lab6
             Point3d p0 = polygon.points[0];
             Point3d p1 = polygon.points[1];
             Point3d p2 = polygon.points[2];
+
             if (p1.Y < p0.Y)
             {
                 var temp = p1;
@@ -1408,22 +1412,21 @@ namespace CG_lab6
                 p2 = temp;
             }
 
-            // Вычисление координат x и значений h для рёбер треугольника
-            int[] x01 = Interpolate((int)p0.Y, (int)p0.X, (int)p1.Y, (int)p1.X);
-            int[] h01 = Interpolate((int)p0.Y, (int)p0.Z, (int)p1.Y, (int)p1.Z);
-            int[] x12 = Interpolate((int)p1.Y, (int)p1.X, (int)p2.Y, (int)p2.X);
-            int[] h12 = Interpolate((int)p1.Y, (int)p1.Z, (int)p2.Y, (int)p2.Z);
-            int[] x02 = Interpolate((int)p0.Y, (int)p0.X, (int)p2.Y, (int)p2.X);
-            int[] h02 = Interpolate((int)p0.Y, (int)p0.Z, (int)p2.Y, (int)p2.Z);
+            List<int> x01 = inter((int)p0.Y, (int)p0.X, (int)p1.Y, (int)p1.X);
+            List<int> h01 = inter((int)p0.Y, (int)p0.Z, (int)p1.Y, (int)p1.Z);
+            List<int> x12 = inter((int)p1.Y, (int)p1.X, (int)p2.Y, (int)p2.X);
+            List<int> h12 = inter((int)p1.Y, (int)p1.Z, (int)p2.Y, (int)p2.Z);
+            List<int> x02 = inter((int)p0.Y, (int)p0.X, (int)p2.Y, (int)p2.X);
+            List<int> h02 = inter((int)p0.Y, (int)p0.Z, (int)p2.Y, (int)p2.Z);
 
-            x01 = x01.Take(x01.Count() - 1).ToArray();
-            int[] x012 = x01.Concat(x12).ToArray();
-            h01 = h01.Take(h01.Count() - 1).ToArray();
-            int[] h012 = h01.Concat(h12).ToArray();
+            x01 = x01.Take(x01.Count() - 1).ToList();
+            List<int> x012 = x01.Concat(x12).ToList();
+            h01 = h01.Take(h01.Count() - 1).ToList();
+            List<int> h012 = h01.Concat(h12).ToList();
 
             int m = x012.Count() / 2;
 
-            int[] x_left, x_right, h_left, h_right;
+            List<int> x_left, x_right, h_left, h_right;
 
             if (x02[m] < x012[m])
             {
@@ -1448,17 +1451,12 @@ namespace CG_lab6
             double i2 = Math.Max(0, Math.Cos(angle_between(position_light, normals_top[p1])));
             double i3 = Math.Max(0, Math.Cos(angle_between(position_light, normals_top[p2])));
 
-            //double i1 = Math.Abs(Math.Cos(scalar_mult(light, normals[P0])));
-            //double i2 = Math.Abs(Math.Cos(scalar_mult(light, normals[P1])));
-            //double i3 = Math.Abs(Math.Cos(scalar_mult(light, normals[P2])));
-
-            // Отрисовка горизонтальных отрезков
             for (int y = (int)p0.Y; y <= (int)p2.Y; ++y)
             {
                 int x_l = x_left[y - (int)p0.Y];
                 int x_r = x_right[y - (int)p0.Y];
 
-                int[] h_segment = Interpolate(x_l, h_left[y - (int)p0.Y], x_r, h_right[y - (int)p0.Y]);
+                List<int> h_segment = inter(x_l, h_left[y - (int)p0.Y], x_r, h_right[y - (int)p0.Y]);
 
                 double ia = i1 * (y - p1.Y) / (p0.Y - p1.Y) + i2 * (p0.Y - y) / (p0.Y - p1.Y);
                 double ib = i1 * (y - p2.Y) / (p0.Y - p2.Y) + i2 * (p0.Y - y) / (p0.Y - p2.Y);
@@ -1467,23 +1465,21 @@ namespace CG_lab6
                 double G = (float)((color_object.ToArgb() & 0x0000FF00) >> 8) * ia;
                 double B = (float)(color_object.ToArgb() & 0x000000FF) * ia;
                 UInt32 newPixel = 0xFF000000 | ((UInt32)R << 16) | ((UInt32)G << 8) | ((UInt32)B);
-                pixels.Add(new Tuple<Point3d, Color>(new Point3d(x_l, y, (float)h_segment[0]),
-                       Color.FromArgb((int)newPixel)));
+                pixels.Add(new Tuple<Point3d, Color>(new Point3d(x_l, y, (float)h_segment[0]), Color.FromArgb((int)newPixel)));
 
 
 
                 for (int x = x_l + 1; x < x_r; ++x)
                 {
                     double ip = ia * (x_r - x) / (x_r - x_l) + ib * (x - x_l) / (x_r - x_l);
-                    double ourZ = h_segment[x - x_l];
-
+                    double z = h_segment[x - x_l];
+                    var aaa = (float)color_object.ToArgb() * ip;
                     R = (float)((color_object.ToArgb() & 0x00FF0000) >> 16) * ip;
                     G = (float)((color_object.ToArgb() & 0x0000FF00) >> 8) * ip;
                     B = (float)(color_object.ToArgb() & 0x000000FF) * ip;
                     newPixel = 0xFF000000 | ((UInt32)R << 16) | ((UInt32)G << 8) | ((UInt32)B);
 
-                    pixels.Add(new Tuple<Point3d, Color>(new Point3d(x, y, (float)ourZ),
-                        Color.FromArgb((int)newPixel)));
+                    pixels.Add(new Tuple<Point3d, Color>(new Point3d(x, y, (float)z), Color.FromArgb((int)newPixel)));
                 }
             }
 
@@ -1491,34 +1487,31 @@ namespace CG_lab6
 
         }
 
-        private static int[] Interpolate(int i0, int d0, int i1, int d1)
+        private List<int> inter(int x0, int y0, int x1, int y1)
         {
-            if (i0 == i1)
+            List<int> result = new List<int>();
+            result.Add(y0);
+
+            if (x0 == x1)
             {
-                return new int[] { d0 };
-            }
-            int[] res;
-            double a = (double)(d1 - d0) / (i1 - i0);
-            double val = d0;
-            if (i0 > i1)
-            {
-                int c = i0;
-                i0 = i1;
-                i1 = c;
+                return result;
             }
 
-            res = new int[i1 - i0 + 1];
-
-            int ind = 0;
-            for (int i = i0; i <= i1; i++)
+            double step = (double)(y1 - y0) / (x1 - x0);
+            double val = y0;
+            if (x0 > x1)
             {
-                res[ind] = (int)Math.Round(val);
-                val += a;
-                ++ind;
+                int temp = x0;
+                x0 = x1;
+                x1 = temp;
             }
 
-
-            return res;
+            for (int i = 0; i <= x1 - x0; ++i)
+            {
+                result.Add((int)Math.Round(val));
+                val += step;
+            }
+            return result;
         }
     }
 }
