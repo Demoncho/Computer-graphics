@@ -27,11 +27,14 @@ namespace CG_lab6
         Pen red_pen = new Pen(Color.Red);
         Pen green_pen = new Pen(Color.Green);
         Pen blue_pen = new Pen(Color.Blue);
+        Point3d position_light;
+        Color color_object = Color.White;
         List<Point3d> polyhedron_points = new List<Point3d>();
         List<Point3d> projection_points = new List<Point3d>();
         List<Point3d> start_rotation_figure_points = new List<Point3d>();
         List<Point3d> finish_rotation_figure_points = new List<Point3d>();
         List<Point3d> rotation_figure_draw_points = new List<Point3d>();
+        Dictionary<Point3d, Point3d> normals_top = new Dictionary<Point3d, Point3d>();
         Polyhedron main_polyhedron = new Polyhedron();
         Line3d line = new Line3d();
         Point3d view_vector = new Point3d();
@@ -60,6 +63,8 @@ namespace CG_lab6
             make_all_invisible();
             polyhedron_points.Clear();
             projection_points.Clear();
+            normals_top.Clear();
+            color_object = Color.White;
             main_polyhedron = new Polyhedron();
             pictureBox_3d_picture.Image = new Bitmap(pictureBox_3d_picture.Width, pictureBox_3d_picture.Height);
             g = Graphics.FromImage(pictureBox_3d_picture.Image);
@@ -107,6 +112,7 @@ namespace CG_lab6
                 main_polyhedron.polygons.Add(polygon_2nd);
                 main_polyhedron.polygons.Add(polygon_3rd);
                 main_polyhedron.polygons.Add(polygon_4th);
+                add_normal();
                 pictureBox_3d_picture.Refresh();
             }
         }
@@ -294,11 +300,22 @@ namespace CG_lab6
                 double[,] old_matr = { { 0, 0, 0, polyhedron_points[i].X }, { 0, 0, 0, polyhedron_points[i].Y }, { 0, 0, 0, polyhedron_points[i].Z }, { 0, 0, 0, 1 } };
                 double[,] new_matr = { { 1, 0, 0, delta_x }, { 0, 1, 0, delta_y }, { 0, 0, 1, delta_z }, { 0, 0, 0, 1 } };
                 old_matr = matrix_multiplication(new_matr, old_matr);
-                polyhedron_points[i] = get_point_from_matrix_colon(old_matr);
+                //polyhedron_points[i] = get_point_from_matrix_colon(old_matr);
+                get_point_from_matrix_colon(polyhedron_points[i], old_matr);
             }
+           /* foreach (Polygon3d polygon in main_polyhedron.polygons)
+                for(int i = 0; i < polygon.points.Count; ++i)
+                {
+                    double[,] old_matr = { { 0, 0, 0, polygon.points[i].X }, { 0, 0, 0, polygon.points[i].Y }, { 0, 0, 0, polygon.points[i].Z }, { 0, 0, 0, 1 } };
+                    double[,] new_matr = { { 1, 0, 0, delta_x }, { 0, 1, 0, delta_y }, { 0, 0, 1, delta_z }, { 0, 0, 0, 1 } };
+                    old_matr = matrix_multiplication(new_matr, old_matr);
+                    polygon.points[i] = get_point_from_matrix_colon(old_matr);
+                }*/
+            add_normal();   
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
             else redraw_rotation_figure();
+            if (color_object != Color.White) create_light(position_light, color_object);
         }
 
         private void turn_x_far(int angle) //Поворот вокруг оси X
@@ -366,11 +383,14 @@ namespace CG_lab6
                 old_matr = matrix_multiplication(matr_dot, old_matr);
                 old_matr = matrix_multiplication(matr_angle, old_matr);
                 old_matr = matrix_multiplication(new_matr, old_matr);
-                polyhedron_points[i] = get_point_from_matrix_colon(old_matr);
+                //polyhedron_points[i] = get_point_from_matrix_colon(old_matr);
+                get_point_from_matrix_colon(polyhedron_points[i], old_matr);
             }
+            add_normal();
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
             else redraw_rotation_figure();
+            if (color_object != Color.White) create_light(position_light, color_object);
         }
 
         private void turn_y(int angle) // Поворот по прямой через  ось Y
@@ -387,11 +407,14 @@ namespace CG_lab6
                 old_matr = matrix_multiplication(matr_dot, old_matr);
                 old_matr = matrix_multiplication(matr_angle, old_matr);
                 old_matr = matrix_multiplication(new_matr, old_matr);
-                polyhedron_points[i] = get_point_from_matrix_colon(old_matr);
+                //polyhedron_points[i] = get_point_from_matrix_colon(old_matr);
+                get_point_from_matrix_colon(polyhedron_points[i], old_matr);
             }
+            add_normal();
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
             else redraw_rotation_figure();
+            if (color_object != Color.White) create_light(position_light, color_object);
         }
 
         private void turn_z(int angle) // Поворот по прямой через  ось Z
@@ -408,11 +431,14 @@ namespace CG_lab6
                 old_matr = matrix_multiplication(matr_dot, old_matr);
                 old_matr = matrix_multiplication(matr_angle, old_matr);
                 old_matr = matrix_multiplication(new_matr, old_matr);
-                polyhedron_points[i] = get_point_from_matrix_colon(old_matr);
+                //polyhedron_points[i] = get_point_from_matrix_colon(old_matr);
+                get_point_from_matrix_colon(polyhedron_points[i], old_matr);
             }
+            add_normal();
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
             else redraw_rotation_figure();
+            if (color_object != Color.White) create_light(position_light, color_object);
         }
 
         private void mirror_x() //Отражение по оси X
@@ -555,6 +581,13 @@ namespace CG_lab6
         private Point3d get_point_from_matrix_colon(double[,] matr) // Получение точки из конечной матрицы
         {
             return new Point3d((float)matr[0, 3], (float)matr[1, 3], (float)matr[2, 3]);
+        }
+
+        private void get_point_from_matrix_colon(Point3d point, double[,] matr)
+        {
+            point.X = (float)matr[0, 3];
+            point.Y = (float)matr[1, 3];
+            point.Z = (float)matr[2, 3];
         }
 
         private void redraw() // Перерисовывание многогранника 
@@ -1264,6 +1297,220 @@ namespace CG_lab6
                     turn_z(1);
                     break;
             }
+        }
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Лабораторная работа № 9. Освещение и текстурирование !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        private void add_normal()  // Добавление нормали к каждой вершине
+        {
+            Dictionary<Polygon3d, Point3d> normal_vectors = new Dictionary<Polygon3d, Point3d>();
+            normals_top.Clear();
+            Point3d mass = mass_center();
+            foreach (Polygon3d polygon in main_polyhedron.polygons)
+            {
+                Point3d point1 = new Point3d(polygon.points[1].X - polygon.points[0].X, polygon.points[1].Y - polygon.points[0].Y, polygon.points[1].Z - polygon.points[0].Z);
+                Point3d point2 = new Point3d(polygon.points[2].X - polygon.points[0].X, polygon.points[2].Y - polygon.points[0].Y, polygon.points[2].Z - polygon.points[0].Z);
+                Point3d normal_vect = new Point3d(point1.Y * point2.Z - point1.Z * point2.Y, point1.Z * point2.X - point1.X * point2.Z, point1.X * point2.Y - point1.Y * point2.X);
+                Point3d direct = new Point3d(mass.X - polygon.points[0].X, mass.Y - polygon.points[0].Y, mass.Z - polygon.points[0].Z);
+                //Point3d norval_vect = new Point3d(temp.X + polygon.points[0].X, temp.Y + polygon.points[0].Y, temp.Z + polygon.points[0].Z);
+                double angle = angle_between(normal_vect, direct);
+                if (angle < Math.PI / 2)
+                {
+                    normal_vect = new Point3d(-normal_vect.X, -normal_vect.Y, -normal_vect.Z);
+                }
+                normal_vectors.Add(polygon, normal_vect);
+            }
+
+            foreach(Point3d point in polyhedron_points)
+            {
+                int count = 0;
+                double sum_vector_x = 0.0;
+                double sum_vector_y = 0.0;
+                double sum_vector_z = 0.0;
+                foreach (Polygon3d polygon in main_polyhedron.polygons)
+                {
+                    if (polygon.points.Contains(point))
+                    {
+                        count++;
+                        sum_vector_x += normal_vectors[polygon].X;
+                        sum_vector_y += normal_vectors[polygon].Y;
+                        sum_vector_z += normal_vectors[polygon].Z;
+                    }
+                }
+                normals_top[point] = new Point3d((float)sum_vector_x /count, (float)sum_vector_y / count, (float)sum_vector_z / count);
+            }
+
+        }
+
+        private void button_add_light_Click(object sender, EventArgs e)
+        {
+            using (Light form = new Light())
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    position_light = form.position;
+                    color_object = form.color_object;
+                    create_light(form.position, form.color_object);
+                }
+            }
+        }
+
+        private void create_light(Point3d position_light, Color color_object)
+        {
+            foreach(Polygon3d polygon in main_polyhedron.polygons)
+            {
+                List<Tuple<Point3d, Color>> full_polygon = get_full_polygon_from_borders(polygon, position_light, color_object);
+                foreach (Tuple<Point3d, Color> point in full_polygon)
+                {
+                    /*double[,] old_matr = { { 0, 0, 0, point.Item1.X }, { 0, 0, 0, point.Item1.Y }, { 0, 0, 0, point.Item1.Z }, { 0, 0, 0, 1 } };
+                    double[,] koeff = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 1 } };
+                    double[,] new_matr = matrix_multiplication(koeff, old_matr);
+                    Point3d aaa = get_point_from_matrix_colon(new_matr);*/
+                    int i = (int)point.Item1.X + 150; // Вот здесь не надо учитывать координаты Z, поэтому лучше всего в ортогональной по Z делать
+                    int j = (int)point.Item1.Y + 150; // 
+                    //g.DrawRectangle(new Pen(point.Item2), point.Item1.X2D(), point.Item1.Y2D(), 1, 1);
+                    g.DrawRectangle(new Pen(point.Item2), i, j, 1, 1);
+                }
+            }
+            pictureBox_3d_picture.Refresh();
+        }
+
+        private List<Tuple<Point3d, Color>> get_full_polygon_from_borders(Polygon3d polygon, Point3d position_light, Color color_object)
+        {
+            List<Tuple<Point3d, Color>> pixels = new List<Tuple<Point3d, Color>>();
+            Point3d p0 = polygon.points[0];
+            Point3d p1 = polygon.points[1];
+            Point3d p2 = polygon.points[2];
+            if (p1.Y < p0.Y)
+            {
+                var temp = p1;
+                p1 = p0;
+                p0 = temp;
+            }
+            if (p2.Y < p0.Y)
+            {
+                var temp = p2;
+                p2 = p0;
+                p0 = temp;
+            }
+            if (p2.Y < p1.Y)
+            {
+                var temp = p1;
+                p1 = p2;
+                p2 = temp;
+            }
+
+            // Вычисление координат x и значений h для рёбер треугольника
+            int[] x01 = Interpolate((int)p0.Y, (int)p0.X, (int)p1.Y, (int)p1.X);
+            int[] h01 = Interpolate((int)p0.Y, (int)p0.Z, (int)p1.Y, (int)p1.Z);
+            int[] x12 = Interpolate((int)p1.Y, (int)p1.X, (int)p2.Y, (int)p2.X);
+            int[] h12 = Interpolate((int)p1.Y, (int)p1.Z, (int)p2.Y, (int)p2.Z);
+            int[] x02 = Interpolate((int)p0.Y, (int)p0.X, (int)p2.Y, (int)p2.X);
+            int[] h02 = Interpolate((int)p0.Y, (int)p0.Z, (int)p2.Y, (int)p2.Z);
+
+            x01 = x01.Take(x01.Count() - 1).ToArray();
+            int[] x012 = x01.Concat(x12).ToArray();
+            h01 = h01.Take(h01.Count() - 1).ToArray();
+            int[] h012 = h01.Concat(h12).ToArray();
+
+            int m = x012.Count() / 2;
+
+            int[] x_left, x_right, h_left, h_right;
+
+            if (x02[m] < x012[m])
+            {
+                x_left = x02;
+                x_right = x012;
+
+                h_left = h02;
+                h_right = h012;
+
+            }
+            else
+            {
+                x_left = x012;
+                x_right = x02;
+
+                h_left = h012;
+                h_right = h02;
+
+            }
+
+            double i1 = Math.Max(0, Math.Cos(angle_between(position_light, normals_top[p0])));
+            double i2 = Math.Max(0, Math.Cos(angle_between(position_light, normals_top[p1])));
+            double i3 = Math.Max(0, Math.Cos(angle_between(position_light, normals_top[p2])));
+
+            //double i1 = Math.Abs(Math.Cos(scalar_mult(light, normals[P0])));
+            //double i2 = Math.Abs(Math.Cos(scalar_mult(light, normals[P1])));
+            //double i3 = Math.Abs(Math.Cos(scalar_mult(light, normals[P2])));
+
+            // Отрисовка горизонтальных отрезков
+            for (int y = (int)p0.Y; y <= (int)p2.Y; ++y)
+            {
+                int x_l = x_left[y - (int)p0.Y];
+                int x_r = x_right[y - (int)p0.Y];
+
+                int[] h_segment = Interpolate(x_l, h_left[y - (int)p0.Y], x_r, h_right[y - (int)p0.Y]);
+
+                double ia = i1 * (y - p1.Y) / (p0.Y - p1.Y) + i2 * (p0.Y - y) / (p0.Y - p1.Y);
+                double ib = i1 * (y - p2.Y) / (p0.Y - p2.Y) + i2 * (p0.Y - y) / (p0.Y - p2.Y);
+
+                double R = (float)((color_object.ToArgb() & 0x00FF0000) >> 16) * ia;
+                double G = (float)((color_object.ToArgb() & 0x0000FF00) >> 8) * ia;
+                double B = (float)(color_object.ToArgb() & 0x000000FF) * ia;
+                UInt32 newPixel = 0xFF000000 | ((UInt32)R << 16) | ((UInt32)G << 8) | ((UInt32)B);
+                pixels.Add(new Tuple<Point3d, Color>(new Point3d(x_l, y, (float)h_segment[0]),
+                       Color.FromArgb((int)newPixel)));
+
+
+
+                for (int x = x_l + 1; x < x_r; ++x)
+                {
+                    double ip = ia * (x_r - x) / (x_r - x_l) + ib * (x - x_l) / (x_r - x_l);
+                    double ourZ = h_segment[x - x_l];
+
+                    R = (float)((color_object.ToArgb() & 0x00FF0000) >> 16) * ip;
+                    G = (float)((color_object.ToArgb() & 0x0000FF00) >> 8) * ip;
+                    B = (float)(color_object.ToArgb() & 0x000000FF) * ip;
+                    newPixel = 0xFF000000 | ((UInt32)R << 16) | ((UInt32)G << 8) | ((UInt32)B);
+
+                    pixels.Add(new Tuple<Point3d, Color>(new Point3d(x, y, (float)ourZ),
+                        Color.FromArgb((int)newPixel)));
+                }
+            }
+
+            return pixels;
+
+        }
+
+        private static int[] Interpolate(int i0, int d0, int i1, int d1)
+        {
+            if (i0 == i1)
+            {
+                return new int[] { d0 };
+            }
+            int[] res;
+            double a = (double)(d1 - d0) / (i1 - i0);
+            double val = d0;
+            if (i0 > i1)
+            {
+                int c = i0;
+                i0 = i1;
+                i1 = c;
+            }
+
+            res = new int[i1 - i0 + 1];
+
+            int ind = 0;
+            for (int i = i0; i <= i1; i++)
+            {
+                res[ind] = (int)Math.Round(val);
+                val += a;
+                ++ind;
+            }
+
+
+            return res;
         }
     }
 }

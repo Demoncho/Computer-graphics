@@ -60,3 +60,4 @@ D:\Homework\Computer-graphics\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.csproj
 D:\Homework\Computer-graphics\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.exe
 D:\Homework\Computer-graphics\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.pdb
 D:\Homework\CG\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Camera.resources
+D:\Homework\CG\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Light.resources

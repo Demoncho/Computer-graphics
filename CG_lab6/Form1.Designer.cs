@@ -95,6 +95,7 @@
             this.button_camera = new System.Windows.Forms.Button();
             this.z_bufer = new System.Windows.Forms.Button();
             this.add_cube_2 = new System.Windows.Forms.Button();
+            this.button_add_light = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_3d_picture)).BeginInit();
             this.groupBox_from.SuspendLayout();
             this.groupBox_to.SuspendLayout();
@@ -482,9 +483,9 @@
             // 
             // button_project
             // 
-            this.button_project.Location = new System.Drawing.Point(61, 540);
+            this.button_project.Location = new System.Drawing.Point(8, 539);
             this.button_project.Name = "button_project";
-            this.button_project.Size = new System.Drawing.Size(104, 23);
+            this.button_project.Size = new System.Drawing.Size(100, 23);
             this.button_project.TabIndex = 43;
             this.button_project.Text = "Спроецировать";
             this.button_project.UseVisualStyleBackColor = true;
@@ -679,9 +680,9 @@
             // 
             // button_camera
             // 
-            this.button_camera.Location = new System.Drawing.Point(61, 572);
+            this.button_camera.Location = new System.Drawing.Point(8, 565);
             this.button_camera.Name = "button_camera";
-            this.button_camera.Size = new System.Drawing.Size(104, 23);
+            this.button_camera.Size = new System.Drawing.Size(100, 23);
             this.button_camera.TabIndex = 59;
             this.button_camera.Text = "Задать камеру";
             this.button_camera.UseVisualStyleBackColor = true;
@@ -689,9 +690,9 @@
             // 
             // z_bufer
             // 
-            this.z_bufer.Location = new System.Drawing.Point(42, 642);
+            this.z_bufer.Location = new System.Drawing.Point(8, 623);
             this.z_bufer.Name = "z_bufer";
-            this.z_bufer.Size = new System.Drawing.Size(75, 23);
+            this.z_bufer.Size = new System.Drawing.Size(100, 23);
             this.z_bufer.TabIndex = 59;
             this.z_bufer.Text = "Z-buffer";
             this.z_bufer.UseVisualStyleBackColor = true;
@@ -699,19 +700,30 @@
             // 
             // add_cube_2
             // 
-            this.add_cube_2.Location = new System.Drawing.Point(44, 601);
+            this.add_cube_2.Location = new System.Drawing.Point(8, 594);
             this.add_cube_2.Name = "add_cube_2";
-            this.add_cube_2.Size = new System.Drawing.Size(114, 23);
+            this.add_cube_2.Size = new System.Drawing.Size(100, 23);
             this.add_cube_2.TabIndex = 60;
             this.add_cube_2.Text = "Добавить куб 2";
             this.add_cube_2.UseVisualStyleBackColor = true;
             this.add_cube_2.Click += new System.EventHandler(this.add_cube_2_Click);
+            // 
+            // button_add_light
+            // 
+            this.button_add_light.Location = new System.Drawing.Point(8, 652);
+            this.button_add_light.Name = "button_add_light";
+            this.button_add_light.Size = new System.Drawing.Size(100, 23);
+            this.button_add_light.TabIndex = 61;
+            this.button_add_light.Text = "Источник света";
+            this.button_add_light.UseVisualStyleBackColor = true;
+            this.button_add_light.Click += new System.EventHandler(this.button_add_light_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(794, 677);
+            this.Controls.Add(this.button_add_light);
             this.Controls.Add(this.button_camera);
             this.Controls.Add(this.add_cube_2);
             this.Controls.Add(this.z_bufer);
@@ -857,6 +869,7 @@
         private System.Windows.Forms.Button button_camera;
         private System.Windows.Forms.Button z_bufer;
         private System.Windows.Forms.Button add_cube_2;
+        private System.Windows.Forms.Button button_add_light;
     }
 }
 
