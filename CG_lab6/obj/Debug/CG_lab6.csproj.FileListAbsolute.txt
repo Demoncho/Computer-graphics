@@ -63,3 +63,5 @@ D:\Homework\CG\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Camera.resources
 D:\Homework\CG\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Light.resources
 C:\CG\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Camera.resources
 C:\CG\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Light.resources
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Camera.resources
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Light.resources

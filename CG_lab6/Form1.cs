@@ -38,6 +38,7 @@ namespace CG_lab6
         Polyhedron main_polyhedron = new Polyhedron();
         Line3d line = new Line3d();
         Point3d view_vector = new Point3d();
+        Camera_class camera = new Camera_class();
         public Form1()
         {
             InitializeComponent();
@@ -1151,11 +1152,49 @@ namespace CG_lab6
                     Point3d p1 = new Point3d(x1, y1, z1);
                     Point3d p2 = new Point3d(x2, y2, z2);
                     Point3d vect = new Point3d(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
-                    float length_line = (float)Math.Sqrt((line.to.X - line.from.X) * (line.to.X - line.from.X) + (line.to.Y - line.from.Y) * (line.to.Y - line.from.Y) + (line.to.Z - line.from.Z) * (line.to.Z - line.from.Z));
+                    float length_line = (float)Math.Sqrt((p2.X - p1.X) * (p2.X - p1.X) + (p2.Y - p1.Y) * (p2.Y - p1.Y) + (p2.Z - p1.Z) * (p2.Z - p1.Z));
                     Point3d unit = new Point3d(vect.X / length_line, vect.Y / length_line, vect.Z / length_line);
+                    camera.position = p1;
+                    camera.view = unit;
                     make_camera_view(unit, p1);
                 }
             }
+        }
+
+        private void help_camera_change(char axis, int angle)
+        {
+            if (axis == 'X')
+            {
+                Point3d x_vector = new Point3d(camera.position.X + angle, camera.position.Y, camera.position.Z);
+                Point3d old = camera.position;
+                camera.position = x_vector;
+                Point3d vect = new Point3d(camera.view.X - camera.position.X, camera.view.Y - camera.position.Y, camera.view.Z - camera.position.Z);
+                float length_line = (float)Math.Sqrt((camera.view.X - camera.position.X) * (camera.view.X - camera.position.X) + (camera.view.Y - camera.position.Y) * (camera.view.Y - camera.position.Y) + (camera.view.Z - camera.position.Z) * (camera.view.Z - camera.position.Z));
+                Point3d unit = new Point3d(vect.X / length_line, vect.Y / length_line, vect.Z / length_line);
+                camera.position =old;
+                help_make_camera_view(unit, angle);
+                camera.position = x_vector;
+            }
+            else
+            {
+                Point3d x_vector = new Point3d(camera.position.X, camera.position.Y, camera.position.Z + angle);
+                Point3d old = camera.position;
+                camera.position = x_vector;
+                Point3d vect = new Point3d(camera.view.X - camera.position.X, camera.view.Y - camera.position.Y, camera.view.Z - camera.position.Z);
+                float length_line = (float)Math.Sqrt((camera.view.X - camera.position.X) * (camera.view.X - camera.position.X) + (camera.view.Y - camera.position.Y) * (camera.view.Y - camera.position.Y) + (camera.view.Z - camera.position.Z) * (camera.view.Z - camera.position.Z));
+                Point3d unit = new Point3d(vect.X / length_line, vect.Y / length_line, vect.Z / length_line);
+                camera.position = old;
+                help_make_camera_view(unit, angle);
+                camera.position = x_vector;
+            }
+        }
+
+        private void help_make_camera_view(Point3d new_view, int c)
+        {
+            double angle = angle_between(camera.view, new_view);
+            double angle_degrees = angle * 180 / Math.PI;
+            //change_position((int)-start.X,(int)-start.Y,(int)-start.Z);
+            turn_y(c*(int)angle_degrees);
         }
 
         private void make_camera_view(Point3d vector, Point3d start)
@@ -1170,6 +1209,8 @@ namespace CG_lab6
 
         private void Z_buffer(Polyhedron polyhedron)
         {
+            position_light = new Point3d(0, 0, 0);
+            color_object = Color.White;
             foreach (Polygon3d polygon in polyhedron.polygons)
             {
                 List<Tuple<Point3d, Color>> full_polygon = get_full_polygon_from_borders(polygon, position_light, color_object);
@@ -1293,16 +1334,16 @@ namespace CG_lab6
             switch (e.KeyCode)
             {
                 case Keys.A:
-                    turn_x(-1);
+                    help_camera_change('X',-1);
                     break;
                 case Keys.D:
-                    turn_x(1);
+                    help_camera_change('X', 1);
                     break;
                 case Keys.W:
-                    turn_z(-1);
+                    help_camera_change('Z', -1);
                     break;
                 case Keys.S:
-                    turn_z(1);
+                    help_camera_change('Z', 1);
                     break;
             }
         }
