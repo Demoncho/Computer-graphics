@@ -1249,7 +1249,7 @@ namespace CG_lab6
              
                     if (z_buff[Tuple.Create(point.X, point.Z)] == point.Y)
                     {
-                        g.FillEllipse(new SolidBrush(Color.FromArgb(120, ((Math.Abs((int)point.Y) % 255 ) + 100) % 255, 0, 0)), new Rectangle((int)point.X2D(), (int)point.To2D().Y, 5, 5));
+                        g.FillEllipse(new SolidBrush(Color.FromArgb(120, ((Math.Abs((int)point.Y) % 255 ) + 100) % 255, 0, 0)), new Rectangle((int)point.X2D(), (int)point.Y2D(), 5, 5));
                     }
                 }
                 
