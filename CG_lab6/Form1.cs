@@ -1406,25 +1406,171 @@ namespace CG_lab6
 
         private void create_light(Point3d position_light, Color color_object)
         {
-            pictureBox_3d_picture.Image = new Bitmap(pictureBox_3d_picture.Width, pictureBox_3d_picture.Height);
+            /*pictureBox_3d_picture.Image = new Bitmap(pictureBox_3d_picture.Width, pictureBox_3d_picture.Height);
             g = Graphics.FromImage(pictureBox_3d_picture.Image);
-            g.Clear(Color.White);
+            g.Clear(Color.White);*/
             foreach(Polygon3d polygon in main_polyhedron.polygons)
             {
-                List<Tuple<Point3d, Color>> full_polygon = get_full_polygon_from_borders(polygon, position_light, color_object);
+                //if (!is_face_visible(polygon)) continue;
+                List<Tuple<Point3d, Color>> full_polygon = get_full_polygon_from_borders_with_color(polygon, position_light, color_object);
                 foreach (Tuple<Point3d, Color> point in full_polygon)
                 {
                     /*double[,] old_matr = { { 0, 0, 0, point.Item1.X }, { 0, 0, 0, point.Item1.Y }, { 0, 0, 0, point.Item1.Z }, { 0, 0, 0, 1 } };
                     double[,] koeff = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 1 } };
                     double[,] new_matr = matrix_multiplication(koeff, old_matr);
                     Point3d aaa = get_point_from_matrix_colon(new_matr);*/
-                    int i = (int)point.Item1.X + 275; // Вот здесь не надо учитывать координаты Z, поэтому лучше всего в ортогональной по Z делать
-                    int j = (int)point.Item1.Y + 275; // 
+                    //int i = (int)point.Item1.X + 275; // Вот здесь не надо учитывать координаты Z, поэтому лучше всего в ортогональной по Z делать
+                    //int j = (int)point.Item1.Y + 275; // 
                     //g.DrawRectangle(new Pen(point.Item2), point.Item1.X2D(), point.Item1.Y2D(), 1, 1);
-                    g.DrawRectangle(new Pen(point.Item2), i, j, 1, 1);
+                    g.DrawRectangle(new Pen(point.Item2), (int)point.Item1.X + 275, (int)point.Item1.Z + 275, 1, 1);
                 }
             }
             pictureBox_3d_picture.Refresh();
+        }
+
+
+        /*public bool is_face_visible(Polygon3d polygon)
+        {
+            Point3d mass = mass_center();
+            Point3d point1 = new Point3d(polygon.points[1].X - polygon.points[0].X, polygon.points[1].Y - polygon.points[0].Y, polygon.points[1].Z - polygon.points[0].Z);
+            Point3d point2 = new Point3d(polygon.points[2].X - polygon.points[0].X, polygon.points[2].Y - polygon.points[0].Y, polygon.points[2].Z - polygon.points[0].Z);
+            Point3d normal_vect = new Point3d(point1.Y * point2.Z - point1.Z * point2.Y, point1.Z * point2.X - point1.X * point2.Z, point1.X * point2.Y - point1.Y * point2.X);
+            Point3d direct = new Point3d(mass.X - polygon.points[0].X, mass.Y - polygon.points[0].Y, mass.Z - polygon.points[0].Z);
+            //Point3d norval_vect = new Point3d(temp.X + polygon.points[0].X, temp.Y + polygon.points[0].Y, temp.Z + polygon.points[0].Z);
+
+            double angle = angle_between(normal_vect, direct);
+
+            if (angle < Math.PI / 2)
+            {
+                normal_vect = new Point3d(-normal_vect.X, -normal_vect.Y, -normal_vect.Z);
+            }
+
+            int x1, y1, z1, x2, y2, z2;
+            Int32.TryParse(cut_off_p1x.Text, out x1);
+            Int32.TryParse(cut_off_p1y.Text, out y1);
+            Int32.TryParse(cut_off_p1z.Text, out z1);
+            Int32.TryParse(cut_off_p2x.Text, out x2);
+            Int32.TryParse(cut_off_p2y.Text, out y2);
+            Int32.TryParse(cut_off_p2z.Text, out z2);
+
+            first_vector = normal.secondPoint - normal.firstPoint;
+            second_vector = new Point3D(x2 - x1, y2 - y1, z2 - z1);
+            angle = scalar_mult(first_vector, second_vector);
+
+            return (angle > Math.PI / 2);
+        }*/
+
+
+        private List<Tuple<Point3d, Color>> get_full_polygon_from_borders_with_color(Polygon3d polygon, Point3d position_light, Color color_object)
+        {
+            Dictionary<Point3d, double> point_intens_tops = new Dictionary<Point3d, double>();
+            foreach (Point3d point in polygon.points)
+            {
+                point_intens_tops.Add(point, Math.Max(0, Math.Cos(angle_between(position_light, normals_top[point]))));
+            }
+            List<Tuple<Point3d, Color>> full_polygon = fill_polygon_color(polygon, point_intens_tops);
+            return full_polygon;
+        }
+
+
+        private List<Tuple<Point3d, Color>> fill_polygon_color(Polygon3d polygon, Dictionary<Point3d, double> point_intens_tops)
+        {
+            List<Tuple<Point3d, Color>> pixels = new List<Tuple<Point3d, Color>>();
+
+            Point3d p1 = polygon.points[0];
+            Point3d p2 = polygon.points[1];
+            Point3d p3 = polygon.points[2];
+            if (p1.Y > p2.Y)
+                swap(ref p1, ref p2);
+            if (p2.Y > p3.Y)
+                swap(ref p2, ref p3);
+            if (p1.Y > p2.Y)
+                swap(ref p1, ref p2);
+
+            float nl1 = (float)point_intens_tops[p1];
+            float nl2 = (float)point_intens_tops[p2];
+            float nl3 = (float)point_intens_tops[p3];
+
+            float dP1P2, dP1P3;
+            if (p2.Y - p1.Y > 0)
+                dP1P2 = (p2.X - p1.X) / (p2.Y - p1.Y);
+            else
+                dP1P2 = 0;
+
+            if (p3.Y - p1.Y > 0)
+                dP1P3 = (p3.X - p1.X) / (p3.Y - p1.Y);
+            else
+                dP1P3 = 0;
+
+            if (dP1P2 > dP1P3)
+                for (var y = (int)p1.Y; y <= (int)p3.Y; y++)
+                    if (y < p2.Y)
+                        ProcessScanLine(y, p1, p3, p1, p2, point_intens_tops, ref pixels);
+                    else
+                        ProcessScanLine(y, p1, p3, p2, p3, point_intens_tops, ref pixels);
+            else
+                for (var y = (int)p1.Y; y <= (int)p3.Y; y++)
+                    if (y < p2.Y)
+                        ProcessScanLine(y, p1, p2, p1, p3, point_intens_tops, ref pixels);
+                    else
+                        ProcessScanLine(y, p2, p3, p1, p3, point_intens_tops, ref pixels);
+
+            return pixels;
+
+        }
+
+        void ProcessScanLine(int y, Point3d pa, Point3d pb, Point3d pc, Point3d pd, Dictionary<Point3d, double> point_intens, ref List<Tuple<Point3d, Color>> pixels)
+        {
+            // Thanks to current Y, we can compute the gradient to compute others values like
+            // the starting X (sx) and ending X (ex) to draw between
+            // if pa.Y == pb.Y or pc.Y == pd.Y, gradient is forced to 1
+            var gradient1 = pa.Y != pb.Y ? (y - pa.Y) / (pb.Y - pa.Y) : 1;
+            var gradient2 = pc.Y != pd.Y ? (y - pc.Y) / (pd.Y - pc.Y) : 1;
+
+            int sx = (int)Interpolate(pa.X, pb.X, gradient1);
+            int ex = (int)Interpolate(pc.X, pd.X, gradient2);
+
+            // starting Z & ending Z
+            float z1 = Interpolate(pa.Z, pb.Z, gradient1);
+            float z2 = Interpolate(pc.Z, pd.Z, gradient2);
+
+            var snl = Interpolate((float)point_intens[pa], (float)point_intens[pb], gradient1);
+            var enl = Interpolate((float)point_intens[pc], (float)point_intens[pd], gradient2);
+
+            // drawing a line from left (sx) to right (ex) 
+            for (var x = sx; x < ex; x++)
+            {
+                float gradient = (x - sx) / (float)(ex - sx);
+
+                var z = Interpolate(z1, z2, gradient);
+                var ndotl = Interpolate(snl, enl, gradient);
+                // changing the color value using the cosine of the angle
+                // between the light vector and the normal vector
+
+                double R = (float)((color_object.ToArgb() & 0x00FF0000) >> 16) * ndotl;
+                double G = (float)((color_object.ToArgb() & 0x0000FF00) >> 8) * ndotl;
+                double B = (float)(color_object.ToArgb() & 0x000000FF) * ndotl;
+                UInt32 newPixel = 0xFF000000 | ((UInt32)R << 16) | ((UInt32)G << 8) | ((UInt32)B);
+                pixels.Add(new Tuple<Point3d, Color>(new Point3d(x, y, z), Color.FromArgb((int)newPixel)));
+                //DrawPoint(new Vector3(x, data.currentY, z), color * ndotl);
+            }
+        }
+
+        float Clamp(float value, float min = 0, float max = 1)
+        {
+            return Math.Max(min, Math.Min(value, max));
+        }
+        float Interpolate(float min, float max, float gradient)
+        {
+            return min + (max - min) * Clamp(gradient);
+        }
+
+        public static void swap<T>(ref T lhs, ref T rhs)
+        {
+            T temp;
+            temp = lhs;
+            lhs = rhs;
+            rhs = temp;
         }
 
         private List<Tuple<Point3d, Color>> get_full_polygon_from_borders(Polygon3d polygon, Point3d position_light, Color color_object)
