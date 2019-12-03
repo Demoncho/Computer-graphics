@@ -13,10 +13,11 @@ namespace CG_lab6
 {
     public partial class Form1 : Form
     {
-        Dictionary<Tuple<float, float>, float> z_buff = new Dictionary<Tuple<float,float>, float>();
+        Dictionary<Tuple<float, float>, float> z_buff = new Dictionary<Tuple<float, float>, float>();
         bool is_segment = false;
         bool is_drawn = false;
         bool not_rotation = true;
+        bool is_horiz = false;
         bool first_rotation_figure = false;
         float length;
         char axis_rotation_figure;
@@ -305,15 +306,15 @@ namespace CG_lab6
                 //polyhedron_points[i] = get_point_from_matrix_colon(old_matr);
                 get_point_from_matrix_colon(polyhedron_points[i], old_matr);
             }
-           /* foreach (Polygon3d polygon in main_polyhedron.polygons)
-                for(int i = 0; i < polygon.points.Count; ++i)
-                {
-                    double[,] old_matr = { { 0, 0, 0, polygon.points[i].X }, { 0, 0, 0, polygon.points[i].Y }, { 0, 0, 0, polygon.points[i].Z }, { 0, 0, 0, 1 } };
-                    double[,] new_matr = { { 1, 0, 0, delta_x }, { 0, 1, 0, delta_y }, { 0, 0, 1, delta_z }, { 0, 0, 0, 1 } };
-                    old_matr = matrix_multiplication(new_matr, old_matr);
-                    polygon.points[i] = get_point_from_matrix_colon(old_matr);
-                }*/
-            add_normal();   
+            /* foreach (Polygon3d polygon in main_polyhedron.polygons)
+                 for(int i = 0; i < polygon.points.Count; ++i)
+                 {
+                     double[,] old_matr = { { 0, 0, 0, polygon.points[i].X }, { 0, 0, 0, polygon.points[i].Y }, { 0, 0, 0, polygon.points[i].Z }, { 0, 0, 0, 1 } };
+                     double[,] new_matr = { { 1, 0, 0, delta_x }, { 0, 1, 0, delta_y }, { 0, 0, 1, delta_z }, { 0, 0, 0, 1 } };
+                     old_matr = matrix_multiplication(new_matr, old_matr);
+                     polygon.points[i] = get_point_from_matrix_colon(old_matr);
+                 }*/
+            add_normal();
             if (is_segment) segment_redraw();
             else if (not_rotation) redraw();
             else redraw_rotation_figure();
@@ -594,6 +595,54 @@ namespace CG_lab6
 
         private void redraw() // Перерисовывание многогранника 
         {
+            if (is_horiz)
+            {
+                pictureBox_3d_picture.Image = new Bitmap(pictureBox_3d_picture.Width, pictureBox_3d_picture.Height);
+                g = Graphics.FromImage(pictureBox_3d_picture.Image);
+                Pen black_pen = new Pen(Color.Black);
+                g.Clear(Color.White);
+                pictureBox_3d_picture.Refresh();
+                int length = polyhedron_points.Count;
+                Dictionary<double, double> max = new Dictionary<double, double>();
+                Dictionary<double, double> min = new Dictionary<double, double>();
+                for (int i = 0; i < polyhedron_points.Count - 1; i += 1)
+                {
+                    double x = polyhedron_points[i].X2D();
+                    double y = polyhedron_points[i].Y2D();
+                    if (max.ContainsKey(x)) {
+                        if (max[x] < y)
+                        {
+                            max[x] = y;
+                        }
+                    }
+                    else
+                    {
+                        max.Add(x, y);
+                    }
+                    if (min.ContainsKey(x))
+                    {
+                        if (min[x] > y)
+                        {
+                            min[x] = y;
+                        }
+                    }
+                    else
+                    {
+                        min.Add(x, y);
+                    }
+                }
+                for (int i = 0; i < polyhedron_points.Count - 1; i += 1) {
+                    double x = polyhedron_points[i].X2D();
+                    double y = polyhedron_points[i].Y2D();
+                    if (max[x] == y || min[x] == y) {
+                        g.DrawLine(black_pen, polyhedron_points[i].To2D(), polyhedron_points[i + 1].To2D());
+                    }
+                }
+                pictureBox_3d_picture.Refresh();
+            }
+            else
+            {
+
             pictureBox_3d_picture.Image = new Bitmap(pictureBox_3d_picture.Width, pictureBox_3d_picture.Height);
             g = Graphics.FromImage(pictureBox_3d_picture.Image);
             g.Clear(Color.White);
@@ -603,6 +652,7 @@ namespace CG_lab6
                     g.DrawLine(pen, polyhedron_points[i].To2D(), polyhedron_points[j].To2D());
             g.DrawLine(new Pen(Color.Red), line.from.To2D(), line.to.To2D());
             pictureBox_3d_picture.Refresh();
+            }
         }
         private void redraw_with_projection() // Перерисовывание многогранника 
         {
@@ -826,7 +876,7 @@ namespace CG_lab6
             polyhedron_points = new List<Point3d>(rotation_points);
             start_rotation_figure_points = new List<Point3d>(rotation_points);
             rotation_figure_draw_points = new List<Point3d>(rotation_points);
-            List<Point3d> old_points= new List<Point3d>(rotation_points);
+            List<Point3d> old_points = new List<Point3d>(rotation_points);
 
             for (int i = 0; i < count; ++i)
             {
@@ -856,10 +906,10 @@ namespace CG_lab6
                 Polygon3d temp_polygon = new Polygon3d();
 
                 for (int j = 0; j < polyhedron_points.Count - 1; ++j)
-                {                   
+                {
                     temp_polygon.points.Add(old_points[j]);
                     temp_polygon.points.Add(old_points[j + 1]);
-                    temp_polygon.points.Add(polyhedron_points[j]);                                  
+                    temp_polygon.points.Add(polyhedron_points[j]);
                     temp_polygon.points.Add(polyhedron_points[j + 1]);
                 }
 
@@ -909,7 +959,7 @@ namespace CG_lab6
                     g.DrawLine(pen, polyhedron_points[i].To2D(), polyhedron_points[i - 1].To2D());
             }
 
-            
+
             for (int i = 0; i < polyhedron_points.Count - count; ++i)
             {
                 g.DrawLine(pen, polyhedron_points[i].To2D(), polyhedron_points[i + count].To2D());
@@ -917,7 +967,7 @@ namespace CG_lab6
             pictureBox_3d_picture.Refresh();
         }
 
- 
+
         private float segment_func(float x, float y)
         {
             return (float)Math.Sin(x) * (float)Math.Cos(y);
@@ -968,8 +1018,8 @@ namespace CG_lab6
             g.DrawLine(green_pen, new Point3d(0, 0, 0).To2D(), new Point3d(50, 0, 0).To2D());
             g.DrawLine(red_pen, new Point3d(0, 0, 0).To2D(), new Point3d(0, 50, 0).To2D());
             g.DrawLine(blue_pen, new Point3d(0, 0, 0).To2D(), new Point3d(0, 0, 50).To2D());
-            for (int i = 0; i < polyhedron_points.Count; i+=2)
-                g.DrawLine(pen, polyhedron_points[i].To2D(), polyhedron_points[i+1].To2D());
+            for (int i = 0; i < polyhedron_points.Count; i += 2)
+                g.DrawLine(pen, polyhedron_points[i].To2D(), polyhedron_points[i + 1].To2D());
             g.DrawLine(new Pen(Color.Red), line.from.To2D(), line.to.To2D());
             pictureBox_3d_picture.Refresh();
         }
@@ -988,10 +1038,10 @@ namespace CG_lab6
                 length = float.Parse(textBox_coordinate_length.Text);
                 float length_2 = (float)(length / Math.Sqrt(2));
                 Point3d start = new Point3d(x, y, z);
-                Point3d p2 = new Point3d(x + length, y , z);
-                Point3d p3 = new Point3d(x , y, z + length);
-                Point3d p4 = new Point3d(x + length, y , z + length);
-                Point3d p5 = new Point3d(x , y + length, z);
+                Point3d p2 = new Point3d(x + length, y, z);
+                Point3d p3 = new Point3d(x, y, z + length);
+                Point3d p4 = new Point3d(x + length, y, z + length);
+                Point3d p5 = new Point3d(x, y + length, z);
                 Point3d p6 = new Point3d(x + length, y + length, z);
                 Point3d p7 = new Point3d(x, y + length, z + length);
                 Point3d p8 = new Point3d(x + length, y + length, z + length);
@@ -1171,7 +1221,7 @@ namespace CG_lab6
                 Point3d vect = new Point3d(camera.view.X - camera.position.X, camera.view.Y - camera.position.Y, camera.view.Z - camera.position.Z);
                 float length_line = (float)Math.Sqrt((camera.view.X - camera.position.X) * (camera.view.X - camera.position.X) + (camera.view.Y - camera.position.Y) * (camera.view.Y - camera.position.Y) + (camera.view.Z - camera.position.Z) * (camera.view.Z - camera.position.Z));
                 Point3d unit = new Point3d(vect.X / length_line, vect.Y / length_line, vect.Z / length_line);
-                camera.position =old;
+                camera.position = old;
                 help_make_camera_view(unit, angle);
                 camera.position = x_vector;
             }
@@ -1194,7 +1244,7 @@ namespace CG_lab6
             double angle = angle_between(camera.view, new_view);
             double angle_degrees = angle * 180 / Math.PI;
             //change_position((int)-start.X,(int)-start.Y,(int)-start.Z);
-            turn_y(c*(int)angle_degrees);
+            turn_y(c * (int)angle_degrees);
         }
 
         private void make_camera_view(Point3d vector, Point3d start)
@@ -1214,25 +1264,25 @@ namespace CG_lab6
             foreach (Polygon3d polygon in polyhedron.polygons)
             {
                 List<Tuple<Point3d, Color>> full_polygon = get_full_polygon_from_borders(polygon, position_light, color_object);
-                
+
                 foreach (Tuple<Point3d, Color> tup_point in full_polygon)
-              {
-                Point3d point = tup_point.Item1;
-                Tuple<float, float> key = Tuple.Create(point.X, point.Z);
-                float value = point.Y;
-                if (z_buff.ContainsKey(key))
                 {
-                  if (z_buff[key] < value)
-                  {
-                    z_buff.Remove(key);
-                    z_buff.Add(key, value);
-                  }
+                    Point3d point = tup_point.Item1;
+                    Tuple<float, float> key = Tuple.Create(point.X, point.Z);
+                    float value = point.Y;
+                    if (z_buff.ContainsKey(key))
+                    {
+                        if (z_buff[key] < value)
+                        {
+                            z_buff.Remove(key);
+                            z_buff.Add(key, value);
+                        }
+                    }
+                    else
+                    {
+                        z_buff.Add(key, value);
+                    }
                 }
-                else
-                {
-                  z_buff.Add(key, value);              
-                }
-              }
             }
         }
 
@@ -1246,13 +1296,13 @@ namespace CG_lab6
                 foreach (Tuple<Point3d, Color> tup_point in full_polygon)
                 {
                     Point3d point = tup_point.Item1;
-             
+
                     if (z_buff[Tuple.Create(point.X, point.Z)] == point.Y)
                     {
-                        g.FillEllipse(new SolidBrush(Color.FromArgb(120, ((Math.Abs((int)point.Y) % 255 ) + 100) % 255, 0, 0)), new Rectangle((int)point.X2D(), (int)point.Y2D(), 5, 5));
+                        g.FillEllipse(new SolidBrush(Color.FromArgb(120, ((Math.Abs((int)point.Y) % 255) + 100) % 255, 0, 0)), new Rectangle((int)point.X2D(), (int)point.Y2D(), 5, 5));
                     }
                 }
-                
+
             }
             z_buff.Clear();
             pictureBox_3d_picture.Refresh();
@@ -1261,71 +1311,71 @@ namespace CG_lab6
         private void add_cube_2_Click(object sender, EventArgs e)
         {
             {
-                    float x = float.Parse(textBox_coordinate_X.Text);
-                    float y = float.Parse(textBox_coordinate_Y.Text);
-                    float z = float.Parse(textBox_coordinate_Z.Text);
-                    length = float.Parse(textBox_coordinate_length.Text);
-                    float length_2 = (float)(length / Math.Sqrt(2));
-                    Point3d start = new Point3d(x, y, z);
-                    Point3d p2 = new Point3d(x + length, y, z);
-                    Point3d p3 = new Point3d(x, y, z + length);
-                    Point3d p4 = new Point3d(x + length, y, z + length);
-                    Point3d p5 = new Point3d(x, y + length, z);
-                    Point3d p6 = new Point3d(x + length, y + length, z);
-                    Point3d p7 = new Point3d(x, y + length, z + length);
-                    Point3d p8 = new Point3d(x + length, y + length, z + length);
+                float x = float.Parse(textBox_coordinate_X.Text);
+                float y = float.Parse(textBox_coordinate_Y.Text);
+                float z = float.Parse(textBox_coordinate_Z.Text);
+                length = float.Parse(textBox_coordinate_length.Text);
+                float length_2 = (float)(length / Math.Sqrt(2));
+                Point3d start = new Point3d(x, y, z);
+                Point3d p2 = new Point3d(x + length, y, z);
+                Point3d p3 = new Point3d(x, y, z + length);
+                Point3d p4 = new Point3d(x + length, y, z + length);
+                Point3d p5 = new Point3d(x, y + length, z);
+                Point3d p6 = new Point3d(x + length, y + length, z);
+                Point3d p7 = new Point3d(x, y + length, z + length);
+                Point3d p8 = new Point3d(x + length, y + length, z + length);
 
-                    polyhedron_points.Add(start);
-                    polyhedron_points.Add(p2);
-                    polyhedron_points.Add(p3);
-                    polyhedron_points.Add(p4);
-                    polyhedron_points.Add(p5);
-                    polyhedron_points.Add(p6);
-                    polyhedron_points.Add(p7);
-                    polyhedron_points.Add(p8);
+                polyhedron_points.Add(start);
+                polyhedron_points.Add(p2);
+                polyhedron_points.Add(p3);
+                polyhedron_points.Add(p4);
+                polyhedron_points.Add(p5);
+                polyhedron_points.Add(p6);
+                polyhedron_points.Add(p7);
+                polyhedron_points.Add(p8);
 
-                    projection_points.Add(start);
-                    projection_points.Add(p2);
-                    projection_points.Add(p3);
-                    projection_points.Add(p4);
-                    projection_points.Add(p5);
-                    projection_points.Add(p6);
-                    projection_points.Add(p7);
-                    polyhedron_points.Add(p8);
+                projection_points.Add(start);
+                projection_points.Add(p2);
+                projection_points.Add(p3);
+                projection_points.Add(p4);
+                projection_points.Add(p5);
+                projection_points.Add(p6);
+                projection_points.Add(p7);
+                polyhedron_points.Add(p8);
 
-                    g.DrawLine(pen, start.To2D(), p2.To2D());
-                    g.DrawLine(pen, start.To2D(), p3.To2D());
-                    g.DrawLine(pen, start.To2D(), p5.To2D());
-                    g.DrawLine(pen, p2.To2D(), p6.To2D());
-                    g.DrawLine(pen, p2.To2D(), p4.To2D());
-                    g.DrawLine(pen, p3.To2D(), p4.To2D());
-                    g.DrawLine(pen, p3.To2D(), p7.To2D());
-                    g.DrawLine(pen, p4.To2D(), p8.To2D());
-                    g.DrawLine(pen, p5.To2D(), p7.To2D());
-                    g.DrawLine(pen, p5.To2D(), p6.To2D());
-                    g.DrawLine(pen, p6.To2D(), p8.To2D());
-                    g.DrawLine(pen, p7.To2D(), p8.To2D());
+                g.DrawLine(pen, start.To2D(), p2.To2D());
+                g.DrawLine(pen, start.To2D(), p3.To2D());
+                g.DrawLine(pen, start.To2D(), p5.To2D());
+                g.DrawLine(pen, p2.To2D(), p6.To2D());
+                g.DrawLine(pen, p2.To2D(), p4.To2D());
+                g.DrawLine(pen, p3.To2D(), p4.To2D());
+                g.DrawLine(pen, p3.To2D(), p7.To2D());
+                g.DrawLine(pen, p4.To2D(), p8.To2D());
+                g.DrawLine(pen, p5.To2D(), p7.To2D());
+                g.DrawLine(pen, p5.To2D(), p6.To2D());
+                g.DrawLine(pen, p6.To2D(), p8.To2D());
+                g.DrawLine(pen, p7.To2D(), p8.To2D());
 
-                    Polygon3d polygon_1st = new Polygon3d();
-                    Polygon3d polygon_2nd = new Polygon3d();
-                    Polygon3d polygon_3rd = new Polygon3d();
-                    Polygon3d polygon_4th = new Polygon3d();
-                    Polygon3d polygon_5th = new Polygon3d();
-                    Polygon3d polygon_6th = new Polygon3d();
+                Polygon3d polygon_1st = new Polygon3d();
+                Polygon3d polygon_2nd = new Polygon3d();
+                Polygon3d polygon_3rd = new Polygon3d();
+                Polygon3d polygon_4th = new Polygon3d();
+                Polygon3d polygon_5th = new Polygon3d();
+                Polygon3d polygon_6th = new Polygon3d();
 
-                    polygon_1st.points.Add(start); polygon_1st.points.Add(p2); polygon_1st.points.Add(p4); polygon_1st.points.Add(p3);
-                    polygon_2nd.points.Add(start); polygon_2nd.points.Add(p5); polygon_2nd.points.Add(p7); polygon_2nd.points.Add(p3);
-                    polygon_3rd.points.Add(p5); polygon_3rd.points.Add(p6); polygon_3rd.points.Add(p8); polygon_3rd.points.Add(p7);
-                    polygon_4th.points.Add(p2); polygon_4th.points.Add(p6); polygon_4th.points.Add(p8); polygon_4th.points.Add(p4);
-                    polygon_5th.points.Add(start); polygon_5th.points.Add(p5); polygon_5th.points.Add(p6); polygon_5th.points.Add(p2);
-                    polygon_6th.points.Add(p3); polygon_6th.points.Add(p7); polygon_6th.points.Add(p8); polygon_6th.points.Add(p4);
-                    main_polyhedron.polygons.Add(polygon_1st);
-                    main_polyhedron.polygons.Add(polygon_2nd);
-                    main_polyhedron.polygons.Add(polygon_3rd);
-                    main_polyhedron.polygons.Add(polygon_4th);
-                    main_polyhedron.polygons.Add(polygon_5th);
-                    main_polyhedron.polygons.Add(polygon_6th);
-                    pictureBox_3d_picture.Refresh();
+                polygon_1st.points.Add(start); polygon_1st.points.Add(p2); polygon_1st.points.Add(p4); polygon_1st.points.Add(p3);
+                polygon_2nd.points.Add(start); polygon_2nd.points.Add(p5); polygon_2nd.points.Add(p7); polygon_2nd.points.Add(p3);
+                polygon_3rd.points.Add(p5); polygon_3rd.points.Add(p6); polygon_3rd.points.Add(p8); polygon_3rd.points.Add(p7);
+                polygon_4th.points.Add(p2); polygon_4th.points.Add(p6); polygon_4th.points.Add(p8); polygon_4th.points.Add(p4);
+                polygon_5th.points.Add(start); polygon_5th.points.Add(p5); polygon_5th.points.Add(p6); polygon_5th.points.Add(p2);
+                polygon_6th.points.Add(p3); polygon_6th.points.Add(p7); polygon_6th.points.Add(p8); polygon_6th.points.Add(p4);
+                main_polyhedron.polygons.Add(polygon_1st);
+                main_polyhedron.polygons.Add(polygon_2nd);
+                main_polyhedron.polygons.Add(polygon_3rd);
+                main_polyhedron.polygons.Add(polygon_4th);
+                main_polyhedron.polygons.Add(polygon_5th);
+                main_polyhedron.polygons.Add(polygon_6th);
+                pictureBox_3d_picture.Refresh();
             }
         }
 
@@ -1334,7 +1384,7 @@ namespace CG_lab6
             switch (e.KeyCode)
             {
                 case Keys.A:
-                    help_camera_change('X',-1);
+                    help_camera_change('X', -1);
                     break;
                 case Keys.D:
                     help_camera_change('X', 1);
@@ -1370,7 +1420,7 @@ namespace CG_lab6
                 normal_vectors.Add(polygon, normal_vect);
             }
 
-            foreach(Point3d point in polyhedron_points)
+            foreach (Point3d point in polyhedron_points)
             {
                 int count = 0;
                 double sum_vector_x = 0.0;
@@ -1386,7 +1436,7 @@ namespace CG_lab6
                         sum_vector_z += normal_vectors[polygon].Z;
                     }
                 }
-                normals_top[point] = new Point3d((float)sum_vector_x /count, (float)sum_vector_y / count, (float)sum_vector_z / count);
+                normals_top[point] = new Point3d((float)sum_vector_x / count, (float)sum_vector_y / count, (float)sum_vector_z / count);
             }
 
         }
@@ -1409,7 +1459,7 @@ namespace CG_lab6
             /*pictureBox_3d_picture.Image = new Bitmap(pictureBox_3d_picture.Width, pictureBox_3d_picture.Height);
             g = Graphics.FromImage(pictureBox_3d_picture.Image);
             g.Clear(Color.White);*/
-            foreach(Polygon3d polygon in main_polyhedron.polygons)
+            foreach (Polygon3d polygon in main_polyhedron.polygons)
             {
                 //if (!is_face_visible(polygon)) continue;
                 List<Tuple<Point3d, Color>> full_polygon = get_full_polygon_from_borders_with_color(polygon, position_light, color_object);
@@ -1700,5 +1750,34 @@ namespace CG_lab6
             }
             return result;
         }
+
+        //горизонт
+
+        private float func(float x, float y)
+        {
+            return (float)(Math.Sin(x) + Math.Cos(y));
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            is_drawn = true;
+            is_horiz = true;
+            float x0, y0, x1, y1;
+            float step;
+
+            float.TryParse(segment_x0.Text, out x0);
+            float.TryParse(segment_x1.Text, out x1);
+            float.TryParse(segment_range.Text, out step);
+            y0 = x0;
+            y1 = x1;
+
+            for (float i = x0; i < x1; i += step)
+                for (float j = y0; j < y1; j += step)
+                {
+                    polyhedron_points.Add(new Point3d(i, func(i, j), j));
+                }
+        redraw();
+        }
+
     }
 }
