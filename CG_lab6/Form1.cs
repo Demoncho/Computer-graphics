@@ -19,6 +19,7 @@ namespace CG_lab6
         bool not_rotation = true;
         bool is_horiz = false;
         bool first_rotation_figure = false;
+        bool is_texture = false;
         float length;
         char axis_rotation_figure;
         int count_rotation_figure;
@@ -28,7 +29,7 @@ namespace CG_lab6
         Pen red_pen = new Pen(Color.Red);
         Pen green_pen = new Pen(Color.Green);
         Pen blue_pen = new Pen(Color.Blue);
-        Point3d position_light;
+        Point3d position_light = new Point3d(0, 0, 0);
         Color color_object = Color.White;
         List<Point3d> polyhedron_points = new List<Point3d>();
         List<Point3d> projection_points = new List<Point3d>();
@@ -40,6 +41,7 @@ namespace CG_lab6
         Line3d line = new Line3d();
         Point3d view_vector = new Point3d();
         Camera_class camera = new Camera_class();
+        Bitmap texture;
         public Form1()
         {
             InitializeComponent();
@@ -62,11 +64,13 @@ namespace CG_lab6
             is_drawn = false;
             not_rotation = true;
             first_rotation_figure = false;
+            is_texture = false;
             make_all_invisible();
             polyhedron_points.Clear();
             projection_points.Clear();
             normals_top.Clear();
             color_object = Color.White;
+            position_light = new Point3d(0, 0, 0);
             main_polyhedron = new Polyhedron();
             pictureBox_3d_picture.Image = new Bitmap(pictureBox_3d_picture.Width, pictureBox_3d_picture.Height);
             g = Graphics.FromImage(pictureBox_3d_picture.Image);
@@ -394,6 +398,7 @@ namespace CG_lab6
             else if (not_rotation) redraw();
             else redraw_rotation_figure();
             if (color_object != Color.White) create_light(position_light, color_object);
+            if (is_texture) draw_texture_polyhedron(texture);
         }
 
         private void turn_y(int angle) // Поворот по прямой через  ось Y
@@ -418,6 +423,7 @@ namespace CG_lab6
             else if (not_rotation) redraw();
             else redraw_rotation_figure();
             if (color_object != Color.White) create_light(position_light, color_object);
+            if (is_texture) draw_texture_polyhedron(texture);
         }
 
         private void turn_z(int angle) // Поворот по прямой через  ось Z
@@ -442,6 +448,7 @@ namespace CG_lab6
             else if (not_rotation) redraw();
             else redraw_rotation_figure();
             if (color_object != Color.White) create_light(position_light, color_object);
+            if (is_texture) draw_texture_polyhedron(texture);
         }
 
         private void mirror_x() //Отражение по оси X
@@ -1449,9 +1456,12 @@ namespace CG_lab6
                 {
                     position_light = form.position;
                     color_object = form.color_object;
-                    create_light(form.position, form.color_object);
+                    create_light(form.position, form.color_object);                   
                 }
             }
+            turn_x(1);
+            //turn_x(-1);
+            pictureBox_3d_picture.Invalidate();
         }
 
         private void create_light(Point3d position_light, Color color_object)
@@ -1461,7 +1471,7 @@ namespace CG_lab6
             g.Clear(Color.White);*/
             foreach (Polygon3d polygon in main_polyhedron.polygons)
             {
-                //if (!is_face_visible(polygon)) continue;
+                if (!is_face_visible(polygon)) continue;
                 List<Tuple<Point3d, Color>> full_polygon = get_full_polygon_from_borders_with_color(polygon, position_light, color_object);
                 foreach (Tuple<Point3d, Color> point in full_polygon)
                 {
@@ -1472,14 +1482,15 @@ namespace CG_lab6
                     //int i = (int)point.Item1.X + 275; // Вот здесь не надо учитывать координаты Z, поэтому лучше всего в ортогональной по Z делать
                     //int j = (int)point.Item1.Y + 275; // 
                     //g.DrawRectangle(new Pen(point.Item2), point.Item1.X2D(), point.Item1.Y2D(), 1, 1);
-                    g.DrawRectangle(new Pen(point.Item2), (int)point.Item1.X + 275, (int)point.Item1.Z + 275, 1, 1);
+                    g.DrawRectangle(new Pen(point.Item2), (int)point.Item1.X + 275, (int)point.Item1.Y + 275, 1, 1);
+                  
                 }
-            }
-            pictureBox_3d_picture.Refresh();
+            }         
+            pictureBox_3d_picture.Invalidate();
         }
 
 
-        /*public bool is_face_visible(Polygon3d polygon)
+        private bool is_face_visible(Polygon3d polygon)
         {
             Point3d mass = mass_center();
             Point3d point1 = new Point3d(polygon.points[1].X - polygon.points[0].X, polygon.points[1].Y - polygon.points[0].Y, polygon.points[1].Z - polygon.points[0].Z);
@@ -1495,20 +1506,16 @@ namespace CG_lab6
                 normal_vect = new Point3d(-normal_vect.X, -normal_vect.Y, -normal_vect.Z);
             }
 
-            int x1, y1, z1, x2, y2, z2;
-            Int32.TryParse(cut_off_p1x.Text, out x1);
-            Int32.TryParse(cut_off_p1y.Text, out y1);
-            Int32.TryParse(cut_off_p1z.Text, out z1);
-            Int32.TryParse(cut_off_p2x.Text, out x2);
-            Int32.TryParse(cut_off_p2y.Text, out y2);
-            Int32.TryParse(cut_off_p2z.Text, out z2);
+            Point3d start_vision = new Point3d(275, 275, 1000);
+            Point3d finish_vision = new Point3d(275, 275, 950);
 
-            first_vector = normal.secondPoint - normal.firstPoint;
-            second_vector = new Point3D(x2 - x1, y2 - y1, z2 - z1);
-            angle = scalar_mult(first_vector, second_vector);
+
+            // first_vector = normal.secondPoint - normal.firstPoint;
+            Point3d vision_vect = new Point3d(finish_vision.X - start_vision.X, finish_vision.Y - start_vision.Y, finish_vision.Z - start_vision.Z);
+            angle = angle_between(normal_vect, vision_vect);
 
             return (angle > Math.PI / 2);
-        }*/
+        }
 
 
         private List<Tuple<Point3d, Color>> get_full_polygon_from_borders_with_color(Polygon3d polygon, Point3d position_light, Color color_object)
@@ -1571,38 +1578,30 @@ namespace CG_lab6
 
         void ProcessScanLine(int y, Point3d pa, Point3d pb, Point3d pc, Point3d pd, Dictionary<Point3d, double> point_intens, ref List<Tuple<Point3d, Color>> pixels)
         {
-            // Thanks to current Y, we can compute the gradient to compute others values like
-            // the starting X (sx) and ending X (ex) to draw between
-            // if pa.Y == pb.Y or pc.Y == pd.Y, gradient is forced to 1
             var gradient1 = pa.Y != pb.Y ? (y - pa.Y) / (pb.Y - pa.Y) : 1;
             var gradient2 = pc.Y != pd.Y ? (y - pc.Y) / (pd.Y - pc.Y) : 1;
 
             int sx = (int)Interpolate(pa.X, pb.X, gradient1);
             int ex = (int)Interpolate(pc.X, pd.X, gradient2);
 
-            // starting Z & ending Z
             float z1 = Interpolate(pa.Z, pb.Z, gradient1);
             float z2 = Interpolate(pc.Z, pd.Z, gradient2);
 
             var snl = Interpolate((float)point_intens[pa], (float)point_intens[pb], gradient1);
             var enl = Interpolate((float)point_intens[pc], (float)point_intens[pd], gradient2);
 
-            // drawing a line from left (sx) to right (ex) 
             for (var x = sx; x < ex; x++)
             {
                 float gradient = (x - sx) / (float)(ex - sx);
 
                 var z = Interpolate(z1, z2, gradient);
                 var ndotl = Interpolate(snl, enl, gradient);
-                // changing the color value using the cosine of the angle
-                // between the light vector and the normal vector
 
                 double R = (float)((color_object.ToArgb() & 0x00FF0000) >> 16) * ndotl;
                 double G = (float)((color_object.ToArgb() & 0x0000FF00) >> 8) * ndotl;
                 double B = (float)(color_object.ToArgb() & 0x000000FF) * ndotl;
                 UInt32 newPixel = 0xFF000000 | ((UInt32)R << 16) | ((UInt32)G << 8) | ((UInt32)B);
                 pixels.Add(new Tuple<Point3d, Color>(new Point3d(x, y, z), Color.FromArgb((int)newPixel)));
-                //DrawPoint(new Vector3(x, data.currentY, z), color * ndotl);
             }
         }
 
@@ -1776,8 +1775,191 @@ namespace CG_lab6
                 {
                     polyhedron_points.Add(new Point3d(i, func(i, j), j));
                 }
-        redraw();
+            redraw();
         }
 
+        private void buttonTexture_Click(object sender, EventArgs e)
+        {
+            is_texture = true;
+            var dialog = new OpenFileDialog();
+            dialog.InitialDirectory = Environment.CurrentDirectory.Replace("bin\\Debug", "") + "textures";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                texture = new Bitmap (Image.FromFile(dialog.FileName));
+                draw_texture_polyhedron(texture);
+            }
+        }
+
+        private void draw_texture_polyhedron(Bitmap texture)
+        {
+
+            /*List<List<Color>> colorBuffer = new List<List<Color>>();
+            for (int i = 0; i < pictureBox_3d_picture.Width; i++)
+            {
+                List<Color> row = new List<Color>();
+                for (int j = 0; j < pictureBox_3d_picture.Height; j++)
+                    row.Add(Color.White);
+                colorBuffer.Add(row);
+            }*/
+
+            foreach (Polygon3d polygon in main_polyhedron.polygons)
+            {
+               if (!is_face_visible(polygon)) continue;
+
+                float max_x = polygon.points[0].X;
+                float min_x = polygon.points[0].X;
+                float max_y = polygon.points[0].Y;
+                float min_y = polygon.points[0].Y;
+                foreach (Point3d p in polygon.points)
+                {
+                    if (max_x < p.X)
+                        max_x = p.X;
+
+                    if (max_y < p.Y)
+                        max_y = p.Y;
+
+                    if (min_x > p.X)
+                        min_x = p.X;
+
+                    if (min_y > p.Y)
+                        min_y = p.Y;
+                }
+
+                double Xdiff = max_x - min_x;
+                double Ydiff = max_y - min_y;
+
+                int picSizeX = (int)Math.Round(max_x - min_x) + 1;//picture size
+                int picSizeY = (int)Math.Round(max_y - min_y) + 1;
+                double size_xx = min_x;
+                double size_yy = min_y;
+
+                List<Tuple<Point3d, Color>> full_polygon = get_full_polygon_from_borders(polygon, position_light, color_object);
+
+                foreach (Tuple<Point3d, Color> point in full_polygon)
+                {
+                    /*double[,] old_matr = { { 0, 0, 0, point.Item1.X }, { 0, 0, 0, point.Item1.Y }, { 0, 0, 0, point.Item1.Z }, { 0, 0, 0, 1 } };
+                    double[,] koeff = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 1 } };
+                    double[,] new_matr = matrix_multiplication(koeff, old_matr);
+                    Point3d aaa = get_point_from_matrix_colon(new_matr);*/
+                    //int i = (int)point.Item1.X + 275; // Вот здесь не надо учитывать координаты Z, поэтому лучше всего в ортогональной по Z делать
+                    //int j = (int)point.Item1.Y + 275; // 
+                    //g.DrawRectangle(new Pen(point.Item2), point.Item1.X2D(), point.Item1.Y2D(), 1, 1);
+                    int i = (int)point.Item1.X ;
+                    int j = (int)point.Item1.Y ;
+                    //if (i - size_xx >= Xdiff || i <= size_xx || i >= pictureBox_3d_picture.Width || i < 0 || j >= pictureBox_3d_picture.Height || j < 0)
+                    //continue;
+                    //colorBuffer[i][j] = texture.GetPixel((int)((i - size_xx) / Xdiff * texture.Width), (int)(texture.Height - 1 - (int)((j + size_yy)) / Ydiff * texture.Height));
+                    int a;
+                    int b;
+
+                    a = (int)Math.Truncate((i - size_xx) / Xdiff * texture.Width);
+                    b = (int)Math.Truncate(((j - size_yy)) / Ydiff * texture.Height);
+
+
+                    if (((int)Math.Truncate((i - size_xx) / Xdiff * texture.Width)) > texture.Width - 1)
+                        a = texture.Width - 1;
+                    else if (((int)Math.Truncate((i - size_xx) / Xdiff * texture.Width)) < 0)
+                        a = 0;
+                    else a = (int)Math.Truncate((i - size_xx) / Xdiff * texture.Width);
+
+                    if (((int)Math.Truncate(((j - size_yy)) / Ydiff * texture.Height)) > texture.Height - 1)
+                        b = texture.Height - 1;
+                    else if (((int)Math.Truncate(((j - size_yy)) / Ydiff * texture.Height)) < 0)
+                        b = 0;
+                    else b = (int)Math.Truncate(((j - size_yy)) / Ydiff * texture.Height);
+
+                    g.DrawRectangle(new Pen(texture.GetPixel(a,b)), (int)point.Item1.X2D(), (int)point.Item1.Y2D() , 1, 1);
+
+                    //g.DrawRectangle(new Pen(point.Item2), (int)point.Item1.X + 275, (int)point.Item1.Z + 275, 1, 1);
+                }
+            }
+            pictureBox_3d_picture.Invalidate();
+        }
+
+        private List<Tuple<Point3d, Color>> get_full_polygon_from_borders_with_texture(Polygon3d polygon, Image texture)
+        {
+            Dictionary<Point3d, double> point_text_tops = new Dictionary<Point3d, double>();
+            foreach (Point3d point in polygon.points)
+            {
+                point_text_tops.Add(point, Math.Max(0, Math.Cos(angle_between(position_light, normals_top[point]))));
+            }
+            List<Tuple<Point3d, Color>> full_polygon = fill_polygon_texture(polygon, texture,point_text_tops);
+            return full_polygon;
+        }
+
+        private List<Tuple<Point3d, Color>> fill_polygon_texture(Polygon3d polygon,Image texture ,Dictionary<Point3d, double> point_intens_tops)
+        {
+            List<Tuple<Point3d, Color>> pixels = new List<Tuple<Point3d, Color>>();
+
+            Point3d p1 = polygon.points[0];
+            Point3d p2 = polygon.points[1];
+            Point3d p3 = polygon.points[2];
+            if (p1.Y > p2.Y)
+                swap(ref p1, ref p2);
+            if (p2.Y > p3.Y)
+                swap(ref p2, ref p3);
+            if (p1.Y > p2.Y)
+                swap(ref p1, ref p2);
+
+            float nl1 = (float)point_intens_tops[p1];
+            float nl2 = (float)point_intens_tops[p2];
+            float nl3 = (float)point_intens_tops[p3];
+
+            float dP1P2, dP1P3;
+            if (p2.Y - p1.Y > 0)
+                dP1P2 = (p2.X - p1.X) / (p2.Y - p1.Y);
+            else
+                dP1P2 = 0;
+
+            if (p3.Y - p1.Y > 0)
+                dP1P3 = (p3.X - p1.X) / (p3.Y - p1.Y);
+            else
+                dP1P3 = 0;
+
+            if (dP1P2 > dP1P3)
+                for (var y = (int)p1.Y; y <= (int)p3.Y; y++)
+                    if (y < p2.Y)
+                        ProcessScanLine_texture(y, p1, p3, p1, p2, point_intens_tops, ref pixels);
+                    else
+                        ProcessScanLine_texture(y, p1, p3, p2, p3, point_intens_tops, ref pixels);
+            else
+                for (var y = (int)p1.Y; y <= (int)p3.Y; y++)
+                    if (y < p2.Y)
+                        ProcessScanLine_texture(y, p1, p2, p1, p3, point_intens_tops, ref pixels);
+                    else
+                        ProcessScanLine_texture(y, p2, p3, p1, p3, point_intens_tops, ref pixels);
+
+            return pixels;
+
+        }
+
+        void ProcessScanLine_texture(int y, Point3d pa, Point3d pb, Point3d pc, Point3d pd, Dictionary<Point3d, double> point_intens, ref List<Tuple<Point3d, Color>> pixels)
+        {
+            var gradient1 = pa.Y != pb.Y ? (y - pa.Y) / (pb.Y - pa.Y) : 1;
+            var gradient2 = pc.Y != pd.Y ? (y - pc.Y) / (pd.Y - pc.Y) : 1;
+
+            int sx = (int)Interpolate(pa.X, pb.X, gradient1);
+            int ex = (int)Interpolate(pc.X, pd.X, gradient2);
+
+            float z1 = Interpolate(pa.Z, pb.Z, gradient1);
+            float z2 = Interpolate(pc.Z, pd.Z, gradient2);
+
+            var snl = Interpolate((float)point_intens[pa], (float)point_intens[pb], gradient1);
+            var enl = Interpolate((float)point_intens[pc], (float)point_intens[pd], gradient2);
+
+            for (var x = sx; x < ex; x++)
+            {
+                float gradient = (x - sx) / (float)(ex - sx);
+
+                var z = Interpolate(z1, z2, gradient);
+                var ndotl = Interpolate(snl, enl, gradient);
+
+                double R = (float)((color_object.ToArgb() & 0x00FF0000) >> 16) * ndotl;
+                double G = (float)((color_object.ToArgb() & 0x0000FF00) >> 8) * ndotl;
+                double B = (float)(color_object.ToArgb() & 0x000000FF) * ndotl;
+                UInt32 newPixel = 0xFF000000 | ((UInt32)R << 16) | ((UInt32)G << 8) | ((UInt32)B);
+                pixels.Add(new Tuple<Point3d, Color>(new Point3d(x, y, z), Color.FromArgb((int)newPixel)));
+            }
+        }
     }
 }
