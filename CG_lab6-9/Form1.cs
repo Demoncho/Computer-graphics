@@ -607,18 +607,22 @@ namespace CG_lab6
                 pictureBox_3d_picture.Image = new Bitmap(pictureBox_3d_picture.Width, pictureBox_3d_picture.Height);
                 g = Graphics.FromImage(pictureBox_3d_picture.Image);
                 Pen black_pen = new Pen(Color.Black);
+                Pen red_pen = new Pen(Color.Red);
+
                 g.Clear(Color.White);
                 pictureBox_3d_picture.Refresh();
                 int length = polyhedron_points.Count;
-                Dictionary<double, double> max = new Dictionary<double, double>();
-                Dictionary<double, double> min = new Dictionary<double, double>();
+                Dictionary<int, double> max = new Dictionary<int, double>();
+                Dictionary<int, double> min = new Dictionary<int, double>();
                 for (int i = 0; i < polyhedron_points.Count - 1; i += 1)
                 {
-                    double x = polyhedron_points[i].X2D();
+                    int x = (int)polyhedron_points[i].X2D();
                     double y = polyhedron_points[i].Y2D();
                     if (max.ContainsKey(x)) {
                         if (max[x] < y)
                         {
+                            g.DrawRectangle(black_pen, (int)x, (int)y, 1, 1);
+                            //g.DrawLine(black_pen, polyhedron_points[i].To2D(), polyhedron_points[i + 1].To2D());
                             max[x] = y;
                         }
                     }
@@ -630,6 +634,7 @@ namespace CG_lab6
                     {
                         if (min[x] > y)
                         {
+                            g.DrawRectangle(black_pen, (int)x, (int)y, 1, 1);
                             min[x] = y;
                         }
                     }
@@ -638,13 +643,20 @@ namespace CG_lab6
                         min.Add(x, y);
                     }
                 }
-                for (int i = 0; i < polyhedron_points.Count - 1; i += 1) {
-                    double x = polyhedron_points[i].X2D();
-                    double y = polyhedron_points[i].Y2D();
-                    if (max[x] == y || min[x] == y) {
-                        g.DrawLine(black_pen, polyhedron_points[i].To2D(), polyhedron_points[i + 1].To2D());
-                    }
-                }
+                //for (int i = 0; i < polyhedron_points.Count - 1; i += 1) {
+                 //   int x = (int)polyhedron_points[i].X;
+                  //  double y = polyhedron_points[i].Z;
+                  //  if (min[x] == y)
+                  //  {
+                  //      if (Math.Sqrt(Math.Pow((polyhedron_points[i].X - polyhedron_points[i + 1].X), 2) + Math.Pow((polyhedron_points[i].Y - polyhedron_points[i + 1].Y), 2) + Math.Pow((polyhedron_points[i].Z - polyhedron_points[i + 1].Z), 2)) < 100)
+                  //      g.DrawLine(black_pen, polyhedron_points[i].To2D(), polyhedron_points[i + 1].To2D());
+                  //  }
+                  //  if (max[x] == y)
+                  //  {
+                   //     if (Math.Sqrt(Math.Pow((polyhedron_points[i].X - polyhedron_points[i + 1].X), 2) + Math.Pow((polyhedron_points[i].Y - polyhedron_points[i + 1].Y), 2) + Math.Pow((polyhedron_points[i].Z - polyhedron_points[i + 1].Z), 2)) < 100)
+                   //     g.DrawLine(red_pen, polyhedron_points[i].To2D(), polyhedron_points[i + 1].To2D());
+                   // }
+                //}
                 pictureBox_3d_picture.Refresh();
             }
             else

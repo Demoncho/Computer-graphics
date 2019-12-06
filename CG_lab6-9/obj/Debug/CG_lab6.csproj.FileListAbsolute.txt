@@ -65,3 +65,15 @@ C:\CG\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Camera.resources
 C:\CG\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Light.resources
 D:\Homework\Computer-graphics\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Camera.resources
 D:\Homework\Computer-graphics\Computer-graphics\CG_lab6\obj\Debug\CG_lab6.Light.resources
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6-9\bin\Debug\CG_lab6.exe.config
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6-9\bin\Debug\CG_lab6.exe
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6-9\bin\Debug\CG_lab6.pdb
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6-9\obj\Debug\CG_lab6.csprojAssemblyReference.cache
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6-9\obj\Debug\CG_lab6.Camera.resources
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6-9\obj\Debug\CG_lab6.Form1.resources
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6-9\obj\Debug\CG_lab6.Light.resources
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6-9\obj\Debug\CG_lab6.Properties.Resources.resources
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6-9\obj\Debug\CG_lab6.Rotation_figure.resources
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6-9\obj\Debug\CG_lab6.csproj.GenerateResource.cache
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6-9\obj\Debug\CG_lab6.exe
+D:\Homework\Computer-graphics\Computer-graphics\CG_lab6-9\obj\Debug\CG_lab6.pdb
