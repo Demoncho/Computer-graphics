@@ -19,14 +19,14 @@ int mode = 0;
 int projection = 0;
 
 //первое место
-float x = 4.5, y = 1, z = 0;
+float x = -4.5, y = 1, z = 0;
 //третье место
-float x1 = 6.5, y11 = 0, z1 = 0;
+float x1 = -6.5, y11 = 0, z1 = 0;
 //второе место
-float x2 = 2, y2 = 0.5, z2 = 0;
+float x2 = -2, y2 = 0.5, z2 = 0;
 
 //center
-float o1 = 4.5, o2 = 0, o3 = 0;
+float o1 = -4.5, o2 = 0, o3 = 0;
 
 void Init(void) {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -82,7 +82,7 @@ void drawWireCube() {
 		glTranslated(x, y, z);
 	}
 
-	glColor3f(238 / 255.0, 201 / 255.0, 0);
+	glColor3f(0.8, 0.498033, 0.196078);
 	glutSolidCube(3);
 
 	glPopMatrix();
@@ -103,7 +103,7 @@ void drawWireCube() {
 		glTranslated(x1, y11, z1);
 	}
 
-	glColor3f(184 / 255.0, 134 / 255.0, 11 / 255.0);
+	glColor3f(0.55, 0.47, 0.14);
 	glutSolidCube(1);
 
 	glPopMatrix();
@@ -124,7 +124,7 @@ void drawWireCube() {
 		glTranslated(-o1, -o2, -o3);
 		glTranslated(x2, y2, z2);
 	}
-	glColor3f(0.75, 0.75, 0.75);
+	glColor3f(0.90, 0.91, 0.98);
 	glutSolidCube(2);
 
 	glFlush();
@@ -142,8 +142,8 @@ void specialKeys(int key, int x, int y) {
 	case GLUT_KEY_F1: rotate_x = rotate_y = rotate_z = mode = 0; break;
 	case GLUT_KEY_F2: rotate_x = rotate_y = rotate_z = 0; mode = 1; break;
 	case GLUT_KEY_F3: rotate_x = rotate_y = rotate_z = 0; mode = 2; break;
-	case GLUT_KEY_SHIFT_L: rotate_x = rotate_y = rotate_z = 0; projection = 0; break;
-	case GLUT_KEY_CTRL_L: rotate_x = rotate_y = rotate_z = 0; projection = 1; break;
+	case GLUT_KEY_SHIFT_R: rotate_x = rotate_y = rotate_z = 0; projection = 0; break;
+	case GLUT_KEY_CTRL_R: rotate_x = rotate_y = rotate_z = 0; projection = 1; break;
 	}
 	glutPostRedisplay();
 }
