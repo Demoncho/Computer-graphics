@@ -1,0 +1,15 @@
+﻿  main.cpp
+C:\Users\plato\source\repos\lab10\Graphics\lab10_task2\main.cpp(60,13): warning C4244:  аргумент: преобразование "double" в "GLfloat", возможна потеря данных
+C:\Users\plato\source\repos\lab10\Graphics\lab10_task2\main.cpp(61,13): warning C4244:  аргумент: преобразование "double" в "GLfloat", возможна потеря данных
+C:\Users\plato\source\repos\lab10\Graphics\lab10_task2\main.cpp(62,13): warning C4244:  аргумент: преобразование "double" в "GLfloat", возможна потеря данных
+C:\Users\plato\source\repos\lab10\Graphics\lab10_task2\main.cpp(75,72): warning C4244:  аргумент: преобразование "double" в "GLfloat", возможна потеря данных
+C:\Users\plato\source\repos\lab10\Graphics\lab10_task2\main.cpp(75,47): warning C4244:  аргумент: преобразование "double" в "GLfloat", возможна потеря данных
+C:\Users\plato\source\repos\lab10\Graphics\lab10_task2\main.cpp(86,52): warning C4244:  аргумент: преобразование "double" в "GLfloat", возможна потеря данных
+C:\Users\plato\source\repos\lab10\Graphics\lab10_task2\main.cpp(86,62): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+C:\Users\plato\source\repos\lab10\Graphics\lab10_task2\main.cpp(88,30): warning C4305:  аргумент: усечение из "double" в "GLfloat"
+  Создание кода
+  2 of 10 functions (20.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  lab10_task2.vcxproj -> C:\Users\plato\source\repos\lab10\Graphics\x64\Release\lab10_task2.exe
