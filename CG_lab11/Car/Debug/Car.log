@@ -1,0 +1,5 @@
+﻿  main.cpp
+d:\homework\cg\computer-graphics\cg_lab11\car\main.cpp(18): warning C4838: преобразование из "double" в "float" требует сужающего преобразования
+d:\homework\cg\computer-graphics\cg_lab11\car\main.cpp(19): warning C4838: преобразование из "double" в "float" требует сужающего преобразования
+d:\homework\cg\computer-graphics\cg_lab11\car\main.cpp(99): warning C4838: преобразование из "double" в "float" требует сужающего преобразования
+  Car.vcxproj -> D:\Homework\CG\Computer-graphics\CG_lab11\Car\Debug\Car.exe
